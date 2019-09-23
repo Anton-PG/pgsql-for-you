@@ -1,4 +1,4 @@
-# Installer pgsql-setup
+# pgsql-for-you
 The script is completely written in bash.
 This script is intended for programmers and system administrators to install and
 configure the PostgreSQL DBMS. This will help standardize the installation in the
