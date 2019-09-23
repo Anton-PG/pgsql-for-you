@@ -48,3 +48,4 @@ configuration implemented in pcs + Corosync + Pasemaker software.
 - Viber:    +7(901)187-51-47
 - Facebook: https://www.facebook.com/profile.php?id=100041576261405 
 
+# A video with instructions for use will be recorded shortly
