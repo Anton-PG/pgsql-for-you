@@ -1,0 +1,4 @@
+[pg]
+name=pg
+baseurl=RS
+gpgcheck=0

@@ -1,0 +1,12 @@
+function rpc {
+b=`cat $HOME/dep/setp.cfg | grep -c random_page_cost`
+
+if [ $b -eq 0 ]
+	then 
+		echo "random_page_cost = '4'" >> $HOME/dep/setp.cfg
+		sed -i 's!rpc.*!rpc='4'!g' dep/arg.cfg	
+else
+		sed -i 's!.*default_statistics_target.*!default_statistics_target = '"'4'"'!g' dep/setp.cfg
+		sed -i 's!rpc.*!rpc='4'!g' dep/arg.cfg
+fi
+}

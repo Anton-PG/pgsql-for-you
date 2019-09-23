@@ -1,0 +1,16 @@
+function mwm {
+RAM=`free -g | awk '/Mem/  {print $2}'`
+let RAM=$RAM+1
+a=`echo "scale=2;$RAM*1024/16" | bc`
+a=`echo $a | awk '{ split($0, n, "."); print n[1] + (substr(n[2], 1, 1) >= 5 ? 1 : 0) }'`
+b=`cat $HOME/dep/setp.cfg | grep -c maintenance_work_mem`
+
+if [ $b -eq 0 ]
+        then
+                echo "maintenance_work_mem = '${a}MB'" >> $HOME/dep/setp.cfg
+		sed -i 's!mwm.*!mwm='${a}'!g' dep/arg.cfg
+        else
+                sed -i 's!.*maintenance_work_mem.*!maintenance_work_mem = '"'${a}MB'"'!g' dep/setp.cfg
+                sed -i 's!mwm.*!mwm='${a}'!g' dep/arg.cfg
+fi
+}

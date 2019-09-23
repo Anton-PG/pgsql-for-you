@@ -1,0 +1,12 @@
+function eic {
+b=`cat $HOME/dep/setp.cfg | grep -c effective_io_concurrency`
+
+if [ $b -eq 0 ]
+	then 
+		echo "effective_io_concurrency = '2'" >> $HOME/dep/setp.cfg
+		sed -i 's!eic.*!eic='2'!g' dep/arg.cfg
+	else
+		sed -i 's!.*effective_io_concurrency.*!effective_io_concurrency = '"'2'"'!g' dep/setp.cfg
+		sed -i 's!eic.*!eic='2'!g' dep/arg.cfg
+fi
+}

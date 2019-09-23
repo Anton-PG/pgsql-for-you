@@ -1,0 +1,62 @@
+All conditions must be met:
+PostgreSQL fork support not supported by this software
+
+1) Configure file /etc/hosts
+
+Example:
+192.168.0.2 node1 pg1   #  The pcs + corosync + pacemacer cluster may not work correctly 
+192.168.0.3 node2 pg2   #  when using special characters in the cluster name, so it’s better to 
+                        #  use some notation, for example, “pg1 and pg2”
+                        
+
+2) Open passwordless access between servers via ssh
+
+Example:
+
+pg1#:                   #  Check passwordless access via ssh
+                       
+ssh-keygen
+ssh-copy-id pg2
+
+pg2#:
+
+ssh-keygen
+ssh-copy-id pg1
+
+3) Disable or configure iptables and firewalld
+Configure ports  TCP:5432 UDP:5404,5405
+Example:
+
+$IPT -A INPUT -p tcp --dport 5432 -s 192.168.1.0/24 -j ACCEPT
+$IPT -A INPUT -p udp --dport 5404 -s 192.168.1.0/24 -j ACCEPT
+$IPT -A INPUT -p udp --dport 5405 -s 192.168.1.0/24 -j ACCEPT
+
+Or:
+
+systemctl stop iptables
+systemctl disable iptables
+
+systemctl stop iptables
+systemctl disable iptables
+
+4) Create base directories:
+
+/                               -the root directory                             # It is recommended to store the DBMS on
+/pgdata                         -directory for storing DBMS                     # a separate mounted drive. Mount point
+/pgdata/backups                 -directory for storing backups                  # /pgdata
+/pgdata/backups/archive         -directory for storing old backups (archive)    # It is recommended to store the backups
+               /archive_xlog    -directory for storing archive transaction logs # on a separate mounted disk. Mount point 
+                                                                                # pgdata/backups
+Comand:                                                                         
+                                                                            
+mkdir /pgdata/backups/archive -p
+mkdir /pgdata/backups/archive_xlog
+
+5) Configure a local Linux OS repository or provide a link to the repository during installation
+The repository must be configured to the following packages:
+bc
+pcs
+pacemaker
+corosync
+fence
+postgresql

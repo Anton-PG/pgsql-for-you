@@ -1,0 +1,27 @@
+function wbuf {
+
+RAM=`free -g | awk '/Mem/  {print $2}'`
+b=`cat $HOME/dep/setp.cfg | grep -c wal_buffers`
+a=16
+if [ $RAM -le 1 ]
+	then
+		 if [ $b -eq 0 ]
+                        then
+                                echo "wal_buffers = '7864kB'" >> $HOME/dep/setp.cfg
+                                sed -i 's!wb=.*!wb='7864'!g' dep/arg.cfg
+                        else
+                                sed -i 's!.*wal_buffers.*!wal_buffers = '"'7864kB'"'!g' dep/setp.cfg
+                                sed -i 's!wb=.*!wb='7864'!g' dep/arg.cfg
+                fi
+	else
+		if [ $b -eq 0 ]
+        		then
+                		echo "wal_buffers = '${a}MB'" >> $HOME/dep/setp.cfg
+				sed -i 's!wb=.*!wb='${a}'!g' dep/arg.cfg
+        		else
+	        	        sed -i 's!.*wal_buffers.*!wal_buffers = '"'${a}MB'"'!g' dep/setp.cfg
+	                	sed -i 's!wb=.*!wb='${a}'!g' dep/arg.cfg
+		fi
+fi
+
+}

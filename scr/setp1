@@ -1,0 +1,66 @@
+function setp1 {
+cp -rp ${HOME}/conf/prop1.one ${HOME}/dep/setp.cfg
+
+clear
+
+infsetwal_level
+read -e -p `infvalue` -i "archive" wl
+while [ "$wl" = "?" ]
+do
+				clear
+		                docwl;
+				read -s -n 1
+				clear
+				infsetwal_level
+				read  -e -p `infvalue` -i "hot_standby" wl        
+
+done
+sed -i 's/wal_level =\(.*\)/wal_level = '"'${wl}'"'/' ${HOME}/dep/setp.cfg
+
+clear
+
+infsetlisten_addresses
+read -e -p "Значение: " -i "*" la
+while [ "$la" = "?" ]
+do
+				clear
+				docla;
+				read -s -n 1
+                                clear
+				infsetlisten_addresses
+				read -e -p `infvalue` -i "*" la
+done
+sed -i 's/listen_addresses =\(.*\)/listen_addresses = '"'${la}'"'/' ${HOME}/dep/setp.cfg
+
+clear
+
+infsetmax_wal_senders
+read -e -p "Значение: " -i "3" mws
+while [ "$mws" = "?" ]
+do
+				clear
+				docmws;
+				read -s -n 1
+                                clear
+				infsetmax_wal_senders
+				read -e -p `infvalue` -i "3" mws
+done
+sed -i 's/max_wal_senders =\(.*\)/max_wal_senders = '"'${mws}'"'/' ${HOME}/dep/setp.cfg
+
+clear
+
+infsetmax_replication_slots
+read -e -p "Значение: " -i "3" mrs
+while [ "$mrs" = "?" ]
+do
+				clear
+				docmrs;
+                                read -s -n 1
+                                clear
+				infsetmax_replication_slots
+				read -e -p `infvalue` -i "3" mrs
+done
+sed -i 's/max_replication_slots =\(.*\)/max_replication_slots = '"'${mrs}'"'/' ${HOME}/dep/setp.cfg
+
+mas
+}

@@ -1,0 +1,100 @@
+function vm_fence_conf {
+HOME=$(pwd)
+
+cp -rp $HOME/conf/vmfence.one $HOME/dep/vmfence.cfg
+. $HOME/dep/config.cfg
+
+clear
+
+infsetnrf
+read nrf
+while [ "$nrf" = "?" ]
+do
+				clear
+                                docnrf;
+				read -s -n 1
+                                clear
+				infsetnrf
+				read nrf
+				
+done                    
+sed -i 's/^nrf=\(.*\)/nrf='${nrf}'		 ##Cluster resource name/' ${HOME}/dep/vmfence.cfg
+clear
+
+infsetdnsvm
+read dnsvm
+while [ "$dnsvm" = "?" ]
+do
+                                clear
+                                docdnsvm;
+				read -s -n 1
+                                clear
+				infsetdnsvm
+                                read dnsvm
+
+done                    
+sed -i 's/^dnsvm=\(.*\)/dnsvm='${dnsvm}'		##DNS VM VCenter/' ${HOME}/dep/vmfence.cfg
+clear
+
+infsetuservm
+read uservm
+while [ "$uservm" = "?" ]
+do
+                                clear
+                                docuservm;
+				read -s -n 1
+                                clear
+				infsetuservm
+                                read uservm
+
+done
+echo "uservm=${uservm}		##Login technical user VM" >> ${HOME}/dep/vmfence.cfg
+clear
+
+infsetpassvm
+read passvm
+while [ "$passvm" = "?" ]
+do
+                                clear
+                                docpassvm;
+				read -s -n 1
+                                clear
+				infsetpassvm
+                                read passvm
+
+done
+sed -i 's/^passvm=\(.*\)/passvm='${passvm}'		##Password technical user VM/' ${HOME}/dep/vmfence.cfg
+clear
+
+infsetvmname1
+read vmname1
+while [ "$vmname1" = "?" ]
+do
+                                clear
+                                docvmname;
+				read -s -n 1
+                                clear
+				infsetvmname1
+                                read vmname1
+
+done
+sed -i 's/^vmname1=\(.*\)/vmname1='${vmname1}'		##Name of the Master server virtual machine/' ${HOME}/dep/vmfence.cfg
+clear
+
+infsetvmname2
+read vmname2
+while [ "$vmname2" = "?" ]
+do
+                                clear
+                                docvmname;
+				read -s -n 1
+                                clear
+				infsetvmname2
+                                read vmname2
+
+done
+sed -i 's/^vmname2=\(.*\)/vmname2='${vmname2}'		##Name of the Slave server virtual machine/' ${HOME}/dep/vmfence.cfg
+clear
+
+
+}

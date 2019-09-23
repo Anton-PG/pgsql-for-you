@@ -1,0 +1,31 @@
+function aset {
+a=`yum list installed | grep -c ^bc.x86_64`
+if [ $a -eq 0 ]
+	then
+		 yum install bc -y
+fi
+mxc
+clear
+wkm
+clear
+shb
+clear
+mwm
+clear
+ecs
+clear
+mwp
+clear
+mimaws
+clear
+cct
+clear
+dst
+clear
+rpc
+clear
+eic
+clear
+wbuf
+
+}

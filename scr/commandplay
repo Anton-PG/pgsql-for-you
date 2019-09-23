@@ -1,0 +1,89 @@
+
+function command_play {
+
+yuminfo=1
+clear
+ while :
+        do
+
+infrepo
+
+        read menu
+        case $menu in
+
+                1)
+clear
+cp -rp $HOME/conf/repo.one $HOME/dep/repo.cfg
+inflinkrepo
+read rs
+sed  -i 's!RS!'${rs}'!g' dep/repo.cfg
+repmet=1
+break
+                ;;
+
+                2)
+clear
+repmet=2
+break
+           ;;
+
+                3)
+clear
+repmet=3
+break
+           ;;
+
+        esac
+        done
+if [ $? -eq 0 ];
+                        then
+				infyumin
+                                log${yuminfo}
+                        else
+                                err${yuminfo}
+				read opperror
+                fi
+
+comcol=`wc -l $HOME/scr/$playbook | awk '{print $1}'`
+comnum=1
+while [ $comnum -le $comcol ]
+do
+        comm=`awk 'NR=='$comnum' {print}' $HOME/scr/$playbook`
+	$comm 1>>$HOME/log/info.log 2>>$HOME/log/error.log
+                if [ $? -eq 0 ];
+                        then
+                                echo "progress: ${comnum}/${comcol}"
+				log${yuminfo}
+                                let comnum=$comnum+1
+                        else
+                                err${yuminfo}
+                                 while :
+                                do
+
+                                inferror
+                                
+                                read menu
+                                case $menu in
+
+                                        1) 
+                                                . $HOME/dep/config.cfg
+						. $HOME/dep/arg.cfg
+						break
+                                        ;;
+
+                                        2)
+                                                infyumer
+                                              	if [ $yumdel -eq 0 ]
+							then
+								exit;
+							else
+								exit;
+						fi
+						exit;
+                                        ;;
+                		esac
+        			done
+		fi
+done	
+
+}

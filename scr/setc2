@@ -1,0 +1,159 @@
+function setc2 {
+cp -rp ${HOME}/conf/hban2.one ${HOME}/dep/hba.cfg
+cp -rp ${HOME}/conf/cfgn2.one ${HOME}/dep/config.cfg
+
+clear
+infsetipml
+read -e -p `infvalue` pg1
+while [ "$pg1" = "?" ]
+do
+                clear
+                docipm;
+		read -s -n 1
+		clear
+                        infsetipml
+			read  -e -p `infvalue`  pg1
+
+done
+sed -i 's/^pg1=\(.*\)/pg1='${pg1}'/' ${HOME}/dep/config.cfg
+sed -i 's/H1/'$pg1'/g' ${HOME}/dep/hba.cfg
+
+clear
+
+infsetipsl
+read -e -p `infvalue` pg2
+while [ "$pg2" = "?" ]
+do
+                clear
+                docips;
+                read -s -n 1
+                clear
+                infsetipsl        
+		read  -e -p `infvalue`  pg2
+
+done
+sed -i 's/^pg2=\(.*\)/pg2='${pg2}'/' ${HOME}/dep/config.cfg
+sed -i 's/H2/'$pg2'/g' ${HOME}/dep/hba.cfg
+
+clear
+
+infsetips
+read -e -p `infvalue` s
+while [ "$s" = "?" ]
+do
+                clear
+                docipsh;
+                read -s -n 1
+                clear
+			infsetips
+                        read  -e -p `infvalue`  s
+
+done
+sed -i 's/^s=\(.*\)/s='${s}'/' ${HOME}/dep/config.cfg
+sed -i 's/H0/'$s'/g' ${HOME}/dep/hba.cfg
+clear
+
+infsetipvp
+read -e -p `infvalue` vp
+while [ "$vp" = "?" ]
+do
+                clear
+                docipvp;
+                read -s -n 1
+                clear
+                         infsetipvp
+			 read  -e -p `infvalue`  vp
+
+done
+sed -i 's/^vp=\(.*\)/vp='${vp}'/' ${HOME}/dep/config.cfg
+
+clear
+
+infsetm
+read -e -p `infvalue` m
+while [ "$m" = "?" ]
+do
+                clear
+                docmask_m;
+                read -s -n 1
+                clear
+                infsetm        
+		read  -e -p `infvalue`  m
+
+done
+sed -i 's/^m=\(.*\)/m='${m}'/' ${HOME}/dep/config.cfg
+sed -i 's/MS/'$m'/g' ${HOME}/dep/hba.cfg
+
+clear
+
+infsetsi
+read -e -p `infvalue` si
+while [ "$si" = "?" ]
+do
+                clear
+                docname_ip;
+                read -s -n 1
+                clear
+                infsetsi
+		read  -e -p `infvalue`  si
+
+done
+sed -i 's/^si=\(.*\)/si='${si}'/' ${HOME}/dep/config.cfg
+clear
+
+infsetvnum
+read vnum
+
+if [ $vnum -gt 93 ]
+        then
+onen=${vnum:0:1}
+twon=${vnum:1:1}
+onen=`echo $onen`
+
+sed -i 's/^n=\(.*\)/n='${onen}'.'${twon}'/' ${HOME}/dep/config.cfg
+sed -i 's/^nn=\(.*\)/nn='${onen}''${twon}'/' ${HOME}/dep/config.cfg
+sed -i 's/^nnn=\(.*\)/nnn='${onen}'_'${twon}'/' ${HOME}/dep/config.cfg
+        else
+sed -i 's/^n=\(.*\)/n='${vnum}'/' ${HOME}/dep/config.cfg
+sed -i 's/^nn=\(.*\)/nn='${vnum}'/' ${HOME}/dep/config.cfg
+sed -i 's/^nnn=\(.*\)/nnn='${vnum}'/' ${HOME}/dep/config.cfg
+fi
+
+clear
+infsetpg1
+read h1
+sed -i 's/^h1=\(.*\)/h1='${h1}'/' ${HOME}/dep/config.cfg
+clear
+
+infsetpg2
+read h2
+sed -i 's/^h2=\(.*\)/h2='${h2}'/' ${HOME}/dep/config.cfg
+clear
+
+infsetclname
+read ncl
+sed -i 's/^ncl=\(.*\)/ncl='${ncl}'/' ${HOME}/dep/config.cfg
+clear
+
+infsetrp
+read rp
+sed -i 's/^rp=\(.*\)/rp='${rp}'/' ${HOME}/dep/config.cfg
+clear
+
+infsetpospas
+read pospas
+sed -i 's/^pospas=\(.*\)/pospas='${pospas}'/' ${HOME}/dep/config.cfg
+clear
+
+infsethaclpas
+read haclpas
+sed -i 's/^haclpas=\(.*\)/haclpas='${haclpas}'/' ${HOME}/dep/config.cfg
+clear
+
+infsetto
+read to
+sed -i 's/^to=\(.*\)/to='${to}'/' ${HOME}/dep/config.cfg
+clear
+
+sed -i 's!shieldc.*!shieldc=1!g' dep/shield.cfg
+}

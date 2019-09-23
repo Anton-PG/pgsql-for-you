@@ -1,0 +1,36 @@
+function yum_clean1 {
+yum clean all
+rm -rf /var/cache/yum
+}
+
+function yum_clean2 {
+ssh root@${pg2} -t 'yum clean all'
+ssh root@${pg2} -t 'rm -rf /var/cache/yum'
+}
+
+function delpg1 {
+cd $HOME
+yum erase postgres* -y
+yum erase corosync* -y
+rm -rf /pgdata/*
+rm -rf /var/lib/pgsql/
+rm -rf /etc/yum.repos.d/pg*
+userdel postgres
+}
+
+function delpg2 {
+pcs cluster stop --force
+ssh  root@$pg2  -t "pcs cluster stop --force"
+rm -rf /var/lib/pacemaker/cib/*
+rm -rf /etc/corosync/*
+rm -rf /usr/lib/ocf/resource.d/heartbeat/pgsql
+ssh  root@$pg2  -t "yum erase postgres* -y"
+ssh  root@$pg2  -t "yum erase corosync* -y"
+ssh  root@$pg2  -t "rm -rf /pgdata/*"
+ssh  root@$pg2  -t "rm -rf /var/lib/pgsql/"
+ssh  root@$pg2  -t "rm -rf /var/lib/pacemaker/cib/*"
+ssh  root@$pg2  -t "rm -rf /etc/corosync/*"
+ssh  root@$pg2  -t "rm -rf /usr/lib/ocf/resource.d/heartbeat/pgsql"
+ssh  root@$pg2  -t "rm -rf /etc/yum.repos.d/pg*"
+ssh  root@$pg2  -t "userdel postgres"
+}

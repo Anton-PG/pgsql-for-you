@@ -1,0 +1,235 @@
+. $HOME/dep/config.cfg
+function yumrepo {
+yuminfo=1
+clear
+ while :
+        do
+
+infrepo
+
+        read menu
+        case $menu in
+
+                1)
+clear
+cp -rp $HOME/conf/repo.one $HOME/dep/repo.cfg
+inflinkrepo
+read rs
+sed  -i 's!PGSQL_!PGSQL_'${nnn}'!' dep/repo.cfg
+repmet=1
+break
+                ;;
+
+                2)
+clear
+repmet=2
+break
+           ;;
+
+                3)
+clear
+repmet=3
+break
+           ;;
+
+        esac
+        done
+
+}
+
+function yumfclocpg {
+yuminfo=2
+sed -ie 's/PGDATA=\(.*\)/PGDATA=\/pgdata\/data/' /var/lib/pgsql/.bash_profile
+sed -ie 's/PGDATA=\(.*\)/PGDATA=\/pgdata\/data/' /usr/lib/systemd/system/postgresql-$n.service
+ssh  root@$pg2  -t  "sed -ie 's/PGDATA=\(.*\)/PGDATA=\/pgdata\/data/' /var/lib/pgsql/.bash_profile"
+ssh  root@$pg2  -t  "sed -ie 's/PGDATA=\(.*\)/PGDATA=\/pgdata\/data/' /var/lib/pgsql/.bash_profile"
+}
+
+
+function yumfindpgdata {
+yuminfo=15
+pg1f=`ls -la / | egrep -w -c pgdata`
+if [ $pg1f -eq 0 ]
+	then
+		mkdir -p /pgdata
+fi
+pg2f=`ssh root@$pg2 'ls -la / | egrep -w -c pgdata'`
+if [ $pg2f -eq 0 ]
+        then
+                ssh root@$pg2 'mkdir -p /pgdata'
+fi
+}
+
+function yumpg1 {
+yuminfo=3
+if [ $repmet -eq 1 ]
+        then
+        cp -rp $HOME/dep/repo.cfg /etc/yum.repos.d/pgsql.repo
+        yum install -y postgresql$nn-server postgresql$nn-libs postgresql$nn-contrib postgresql$nn
+fi
+if [ $repmet -eq 2 ]
+        then
+        yum localinstall -y $HOME/rep/postgresql$nn*
+fi
+if [ $repmet -eq 3 ]
+        then
+        yum install -y postgresql$nn-server postgresql$nn-libs postgresql$nn-contrib postgresql$nn
+fi
+
+}
+
+function yumpcsstartstop {
+yuminfo=4
+ssh  root@$pg2  -t "pcs cluster stop"
+pcs cluster stop --force
+pcs cluster start
+sleep 45
+ssh  root@$pg2  -t "pcs cluster start"
+}
+
+function yumchownpg {
+yuminfo=16
+ssh  root@$pg2  -t "chown -R postgres:postgres /pgdata"
+}
+
+function yumpg2 {
+yuminfo=17
+if [ $repmet -eq 1 ]
+        then
+	scp /etc/yum.repos.d/pgsql.repo root@pg2:/etc/yum.repos.d/pgsql.repo
+        ssh root@$pg2 'yum install -y postgresql'$nn'-server postgresql'$nn'-libs postgresql'$nn'-contrib postgresql'$nn''
+fi
+if [ $repmet -eq 2 ]
+        then
+	scp $HOME/rep/postgresql"$nn"* root@$pg2:/tmp/
+        ssh root@$pg2 'yum localinstall -y /tmp/postgresql$nn*'
+fi
+if [ $repmet -eq 3 ]
+        then
+        ssh root@$pg2 'yum install -y postgresql'$nn'-server postgresql'$nn'-libs postgresql'$nn'-contrib postgresql'$nn''
+fi
+}
+
+function yumchownpg {
+yuminfo=5
+echo -e "$pospas\\n$pospas\\n" | passwd postgres
+chown -R postgres:postgres /pgdata
+chmod -R 700 /pgdata
+chown postgres:postgres ${HOME}/dep/setp.cfg
+ssh root@$pg2 "echo -e $pospas\\\\n$pospas\\\\n | passwd postgres"
+ssh root@$pg2 'chown -R postgres:postgres /pgdata'
+ssh root@$pg2 'chmod -R 700 /pgdata'
+}
+
+function yumpcsconf {
+yuminfo=6
+echo -e "$haclpas\\n$haclpas\\n" | passwd hacluster
+ssh root@$pg2 "echo -e "$haclpas\\\\n$haclpas\\\\n" | passwd hacluster"
+cp -rp ${HOME}/lib/pgsql$nn ${HOME}/dep/pgsql
+cp ${HOME}/dep/pgsql /usr/lib/ocf/resource.d/heartbeat/
+scp ${HOME}/dep/pgsql root@$pg2:/usr/lib/ocf/resource.d/heartbeat/
+chmod +x /usr/lib/ocf/resource.d/heartbeat/pgsql
+ssh  root@$pg2  -t "chmod +x /usr/lib/ocf/resource.d/heartbeat/pgsql"
+systemctl start pcsd.service; systemctl is-active pcsd.service;\
+systemctl enable pcsd.service; systemctl is-enabled pcsd.service
+ssh  root@$pg2  -t "systemctl start pcsd.service; systemctl is-active pcsd.service;\
+systemctl enable pcsd.service; systemctl is-enabled pcsd.service"
+echo -e "hacluster\\n$haclpas\\n" | pcs cluster auth $h1 $h2
+pcs cluster setup --start --name $ncl $h1 $h2
+resource_pcs
+}
+
+
+function yuminitdb {
+yuminfo=7
+su - postgres -c '/usr/pgsql-'${n}'/bin/initdb -k -D /pgdata/data'
+}
+
+function yumconfpg {
+yuminfo=8
+cp -rp $HOME/dep/hba.cfg /pgdata/data/pg_hba.conf
+cp -rp $HOME/dep/setp.cfg /pgdata/data/postgresql.auto.conf
+}
+
+function yumstartpg {
+yuminfo=9
+systemctl start postgresql-$n.service
+}
+
+function yumstoppg {
+yuminfo=10
+systemctl stop postgresql-$n.service
+}
+
+function yumpgbasebackup {
+yuminfo=11
+echo $rp | ssh  root@$pg2  -t "pg_basebackup -P -R -X stream -c fast -h $pg1 -U replica -D /pgdata/data"
+ssh  root@$pg2  -t "chown -R postgres:postgres /pgdata"
+}
+
+function yumrepuser {
+yuminfo=12
+su - postgres -c "psql -U postgres -c 'create user replica with replication encrypted password \$\$$rp\$\$'"
+}
+
+function yumpcssoft {
+yuminfo=13
+yum install pcs -y
+ssh  root@$pg2  -t "yum install pcs -y"
+}
+
+function yumpcsstartstop {
+yuminfo=14
+ssh  root@$pg2  -t "pcs cluster stop"
+pcs cluster stop --force
+pcs cluster start
+sleep 45
+ssh  root@$pg2  -t "pcs cluster start"
+}
+
+function yumdreload {
+yuminfo=18
+systemctl daemon-reload
+}
+
+function  yumchownone {
+yuminfo=19
+chown -R postgres:postgres /pgdata
+mkdir /var/log/pg_log
+chown -R postgres:postgres /var/log/pg_log
+}
+
+function yumchowntwo {
+yuminfo=19
+ssh  root@$pg2  -t "chown -R postgres:postgres /pgdata"
+ssh  root@$pg2  -t "mkdir /var/log/pg_log"
+ssh  root@$pg2  -t "chown -R postgres:postgres /var/log/pg_log"
+}
+
+function yumcreatehs {
+yuminfo=20
+dd if=/dev/zero of=/pgdata/data/space.helpfile.img bs=1M count=1024
+}
+
+function yumfclocpg1 {
+yuminfo=2
+sed -ie 's/PGDATA=\(.*\)/PGDATA=\/pgdata\/data/' /var/lib/pgsql/.bash_profile
+sed -ie 's/PGDATA=\(.*\)/PGDATA=\/pgdata\/data/' /usr/lib/systemd/system/postgresql-$n.service
+}
+
+function yumchownpg1 {
+yuminfo=5
+echo -e "$pospas\\n$pospas\\n" | passwd postgres
+chown -R postgres:postgres /pgdata
+chmod -R 700 /pgdata
+chown postgres:postgres $HOME/dep/setp.cfg
+}
+
+function yumfindpgdata1 {
+yuminfo=15
+pgf=`ls -la / | egrep -w -c pgdata`
+if [ $pgf -eq 0 ]
+        then
+                mkdir -p /pgdata
+fi
+}

@@ -1,0 +1,1273 @@
+function infmenuhello {
+
+
+if [ $langlocale -eq 0 ]
+	then
+echo "
+Remember. The developer is not responsible for the operation of this software.
+Use the software at your own risk
+
+Special thanks to one well-known company for the translation;)
+I hope their translator did not spoil my text much
+
+Be sure to stay tuned. 
+Current version: Beta 1.0
+
+Perform all steps sequentially. 
+ 
+  info) README
+
+  1)	Configuration settings			(STAGE: 1)
+  2)	Tuning and optimization PostgreSQL	(STAGE: 2)
+  3)	Install PostgreSQL 			(STAGE: 3)
+  4)	Status Cluster
+  5)	Configure backups			(STAGE: 4) dispensable
+  6)	Configure fence-agent			(STAGE: 5) dispensable
+  7)    Language / Язык
+  8)    How to support this project?
+  0)	Exit
+  
+  
+  Just in case:
+  cyc)   Clean cache yum
+  delpg) Remove PostgreSQL 
+
+
+
+
+
+If you find a mistake, report it. Together we will make PostgreSQL better.
+
+For feedback:
+- MAIL:     postgresqlclsearch@gmail.com
+- Telegram: +7(901)187-51-47
+- Viber:    +7(901)187-51-47
+- Facebook: https://www.facebook.com/profile.php?id=100041576261405
+"
+	else
+
+echo "
+Разработчик не несет ответственности за работу данного програмного обеспечения
+Использование установщика осуществляется на свой страх и риск.
+
+Обязательно следите за обновлениями.
+Текущая версия: Beta 1.0
+
+При работе скрипта требуется пройти все этапы последовательно.
+
+  info) Справка
+
+  1)    Настройка конфигураций                  (ЭТАП: 1)
+  2)    Настройка и оптимизация PostgreSQL      (ЭТАП: 2)
+  3)    Установить PostgreSQL                   (ЭТАП: 3)
+  4)    Статус кластера
+  5)    Настройка бекапа                        (ЭТАП: 4) Не обязательный
+  6)    Настройка fence-agent                   (ЭТАП: 5) Не обязательный
+  7)    Язык / Language 
+  8)	Как я могу поддержать этот проект?
+  0)    Выход
+
+
+  Для крайнего случая:
+  cyc)   Очистить кэш yum
+  delpg) Удалить PostgreSQL
+
+Если вы нашли ошибку, сообщите об этом. Вместе мы сделаем PostgreSQL лучше.
+
+Для обратной связи:
+- MAIL:     postgresqlclsearch@gmail.com
+- Telegram: +7(901)187-51-47
+- Viber:    +7(901)187-51-47
+- Facebook: https://www.facebook.com/profile.php?id=100041576261405
+"
+fi
+}
+
+function infmenuhowsupport {
+if [ $langlocale -eq 0 ]
+	then
+		echo "
+How to support this project:
+
+- Script testing and bug detection.
+- Optimization for other operating systems.
+- Correction of errors in the documentation, translation, adding new documentation.
+- Сreate scripts for opening connection pools.
+- Writing a playbook for other OpenSource cluster solutions.
+- Сorrection of the current code
+- Adding PostgreSQL fork support
+
+
+1) I want to join the project.
+2) I found an error/inaccuracy in the operation of algorithms, scripts and e.t.c.
+0) Back
+
+"
+	else
+		echo "
+Как поддержать этот проект:
+
+- Скрипт-тестирование и обнаружение ошибок.
+- Оптимизация под другие операционные системы.
+- Исправление ошибок в документации, перевод, добавление новой документации.
+- Создание скриптов для открытия пулов соединений.
+- Написание playbook для других OpenSource кластерных решений.
+- Исправление текущего кода
+- Добавление поддержки форков PostgreSQL
+
+
+1) Я хочу присоединиться к работе над проектом
+2) Я нашел ошибку/неточность в работе скриптов, алгоритмов и т.д.
+0) Назад
+"
+fi
+}
+
+function menujoinp {
+if [ $langlocale -eq 0 ]
+	then
+		echo "
+
+To become a member of the project, you must:
+
+1. Send a message to postgresqlclsearch@gmail.com
+
+With the topic:
+Join the project
+
+In the body of the letter indicate:
+a. Name
+b. Age
+c. nationality
+d. PostgreSQL Experience
+e. How to contact you
+f. Other information that you think is important
+
+2. Wait for an answer
+
+To exit, press any key.
+"
+	else
+		echo "
+Для того, чтобы стать участником проекта, необходимо:
+
+1. Отправить сообщение по почте postgresqlclsearch@gmail.com 
+
+С темой:
+Join the project
+
+В теле письма указать:
+а. Имя
+б. Возраст
+в. Страна
+д. Опыт работы с PostgreSQL
+е. Как с вами связаться
+ж. Прочая информация, которая по вашему мнению важна
+
+2. Ожидать ответа
+
+Для выхода нажмите любую клавишу.
+"
+fi
+}
+
+function menuother {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+If you have any questions, suggestions for development, thanks and complaints, please write here in free form:
+
+- MAIL:     postgresqlclsearch@gmail.com
+- Telegram: +7(901)187-51-47
+- Viber:    +7(901)187-51-47
+- Facebook: https://www.facebook.com/profile.php?id=100041576261405
+"
+	else
+		echo "
+Если у вас возникли вопросы, предложения по развитию, благодарности и жалобы то пишите сюда в свободной форме:
+
+- MAIL:     postgresqlclsearch@gmail.com
+- Telegram: +7(901)187-51-47
+- Viber:    +7(901)187-51-47
+- Facebook: https://www.facebook.com/profile.php?id=100041576261405
+"
+fi
+}
+
+function menuerrorfind {
+if [ $langlocale -eq 0 ]
+	then
+		echo "
+1. Contact in any way indicated here:
+- MAIL:     postgresqlclsearch@gmail.com
+- Telegram: +7(901)187-51-47
+- Viber:    +7(901)187-51-47
+- Facebook: https://www.facebook.com/profile.php?id=100041576261405
+
+2. Start writing a message with:
+I found a ERROR
+Indicate: where the error was found, describe the error, attach a log or screenshot
+
+To exit, press any key.
+"
+	else
+		echo "
+Для того, что бы сообщить об ошибке нужно
+
+1. Связаться любым способом указанным тут:
+- MAIL:     postgresqlclsearch@gmail.com
+- Telegram: +7(901)187-51-47
+- Viber:    +7(901)187-51-47
+- Facebook: https://www.facebook.com/profile.php?id=100041576261405
+
+2. Начать сообщение с:
+I found a ERROR!
+Далее указать где найдена ошибка, описать ее, по возможности прикрепить лог файл, или скриншот.
+
+Для выхода нажмите любую клавишу.
+"
+fi
+}
+
+
+function infsetconf {
+if [ $langlocale -eq 0 ]
+then
+echo "
+1) Configure standalone PostgreSQL
+2) Configure master-slave PostgreSQL
+3) View configure
+0) Back"
+else
+echo "
+1) Настройка одно-узловой конфигурации
+2) Настройка двух-узловой конфигурации
+3) Отобразить текущие настройки
+0) Вернуться в основное меню"
+fi
+}
+
+
+function infsettuning {
+if [ $langlocale -eq 0 ]
+then
+echo "
+1) Tuning and optimization PostgreSQL standalone configuration
+2) Tuning and optimization PostgreSQL master-slave configuration
+3) View configure
+0) Back"
+else
+echo "
+1) Настройка и оптимизация PostgreSQL в одно-узловой конфигурации
+2) Настройка и оптимизация PostgreSQL в двух-узловой конфигурации
+3) Отобразить текущие настройки
+0) Вернуться в основное меню"
+fi
+}
+
+function infinstallpg {
+if [ $langlocale -eq 0 ]
+then
+echo "
+1) Install standalone configuration
+2) Install master-slave configuration
+0) Back"
+else
+echo "
+1) Установка одно-узловой конфигурации
+2) Установка двух-узловой конфигурации
+0) Вернуться в основное меню"
+fi
+}
+
+function infbackup {
+if [ $langlocale -eq 0 ]
+then
+echo "
+1) Configure backup standalone
+2) Configure backup master-slave
+3) Configure backup standalone  with transaction log storage
+4) Configure backup master-slave  with transaction log storage
+0) Back"
+else
+echo "
+1) Настройка бекапа одно-узловая конфигурация
+2) Настройка бекапа двух-узловая конфигурация
+3) Настройка бекапа одно-узловая конфигурация c хранением транзакционного лога
+4) Настройка бекапа двух-узловая конфигурация c хранением транзакционного лога
+0) Вернуться в основное меню"
+fi
+}
+
+function inffence {
+if [ $langlocale -eq 0 ]
+then
+echo "
+1) Configure Fence-agent VM
+2) View configure Fence-agent VM
+3) Install Fence-agent
+0) Back"
+else
+echo "
+1) Настройка Fence-agent VM
+2) Отобразить настройки Fence-agent VM
+3) Установить Fence-agent
+0) Вернуться в основное меню"
+fi
+}
+
+function infcyc {
+if [ $langlocale -eq 0 ]
+then
+echo "
+1) Clean cache yum standalone configuration
+2) Clean cache yum master-slave configuration
+0) Back
+"
+else
+echo "
+1) Очистить кэш yum одно-узловая конфигурация
+2) Очистить кэш yum двух-узловая конфигурация
+0) Вернуться в основное меню
+"
+fi
+}
+
+
+function infremovepg {
+if [ $langlocale -eq 0 ]
+then
+echo "
+When using, be sure to check out the list of commands.
+
+- yum erase postgres* -y
+- yum erase corosync* -y
+- rm -rf /pgdata/*
+- rm -rf /var/lib/pgsql/
+- rm -rf /etc/yum.repos.d/pg*
+- userdel postgres
+- ssh  root@$pg2  -t "yum erase postgres* -y"
+- ssh  root@$pg2  -t "yum erase corosync* -y"
+- ssh  root@$pg2  -t "rm -rf /pgdata/*"
+- ssh  root@$pg2  -t "rm -rf /var/lib/pgsql/"
+- ssh  root@$pg2  -t "rm -rf /var/lib/pacemaker/cib/*"
+- ssh  root@$pg2  -t "rm -rf /etc/corosync/*"
+- ssh  root@$pg2  -t "rm -rf /usr/lib/ocf/resource.d/heartbeat/pgsql"
+- ssh  root@$pg2  -t "rm -rf /etc/yum.repos.d/pg*"
+- ssh  root@$pg2  -t "userdel postgres"
+
+d1) Remove PostgreSQL standalone configuration
+d2) Remove PostgreSQL master-slave configuration
+0) Back
+"
+else
+echo "
+При использовании, обязательно ознакомьтесь со списком команд.
+
+- yum erase postgres* -y
+- yum erase corosync* -y
+- rm -rf /pgdata/*
+- rm -rf /var/lib/pgsql/
+- rm -rf /etc/yum.repos.d/pg*
+- userdel postgres
+- ssh  root@$pg2  -t "yum erase postgres* -y"
+- ssh  root@$pg2  -t "yum erase corosync* -y"
+- ssh  root@$pg2  -t "rm -rf /pgdata/*"
+- ssh  root@$pg2  -t "rm -rf /var/lib/pgsql/"
+- ssh  root@$pg2  -t "rm -rf /var/lib/pacemaker/cib/*"
+- ssh  root@$pg2  -t "rm -rf /etc/corosync/*"
+- ssh  root@$pg2  -t "rm -rf /usr/lib/ocf/resource.d/heartbeat/pgsql"
+- ssh  root@$pg2  -t "rm -rf /etc/yum.repos.d/pg*"
+- ssh  root@$pg2  -t "userdel postgres"
+
+
+d1) Удалить PostgreSQL одно-узловая конфигурация
+d2) Удалить PostgreSQL двух-узловая конфигурация
+0) Вернуться в основное меню
+"
+fi
+}
+
+function infinfo {
+if [ $langlocale -eq 0 ]
+then
+echo "
+1) ENG README
+2) RUS README
+0) Back
+"
+else
+echo "
+1) ENG README
+2) RUS README 
+0) Вернуться назад
+"
+fi
+}
+
+function inflanguage {
+if [ $langlocale -eq 0 ]
+then
+echo "
+1) English
+2) Русский
+0) Back
+"
+else
+echo "
+1) English
+2) Русский
+0) Назад
+"
+fi
+}
+
+function infbackgl {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Enter the backup storage depth in days. (To display help information, enter "?")
+Valid Values ( integer )
+Example: 2
+"
+else
+echo "
+Введите глубину хранения бекапов в сутках . (Для вывода справочной информации введите "?")
+Допустимые значения ( целые числа )
+Пример: 2
+"
+fi
+}
+
+function infbacksched {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Enter backup schedule . (To display help information, enter "?")
+Valid Values ( integer )
+Example: 0 22 * * *
+"
+else
+echo "
+Введите удобное время выполнения бекапов . (Для вывода справочной информации введите "?")
+Допустимые значения ( целые числа, вводить как расписание в crontab )
+Пример: 0 22 * * *
+"
+fi
+}
+
+function infbackat {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Enter a value for archive_timeout. (To display help information, enter "?")
+Valid Values ( integer )
+Example: 300
+"
+else
+echo "
+Введите значение параметра archive_timeout . (Для вывода справочной информации введите "?")
+Допустимые значения в секундах ( целые числа )
+Пример: 300
+"
+fi
+}
+
+
+function infvalue {
+if [ $langlocale -eq 0 ]
+then
+echo  "
+Value:
+"
+else
+echo "
+Значение: 
+"
+fi
+}
+
+
+function infrepo {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Choose repository type
+
+1) Enter link to repository
+2) Use local repository $HOME/rep
+3) No repository setup required
+"
+else
+echo "
+Выберете тип репозитория
+
+1) Указать ссылку на репозиторий
+2) Использовать локальный репозиторий $HOME/rep
+3) Настройка репозитория не требуется
+"
+fi
+}
+
+
+function inflinkrepo {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Enter the PostgreSQL repository link
+Example: https://yum.postgresql.org/9.6/redhat/rhel-7-x86_64
+"
+else
+echo "
+Введите ссылку на репозиторий PostgreSQL. Убедитесь, что по данной ссылке имеются пакеты той версии, которй вы указали в конфигурации.
+Пример: https://yum.postgresql.org/9.6/redhat/rhel-7-x86_64
+"
+fi
+}
+
+
+function infhacluster {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Enter haclsuter name and password 
+"
+else
+echo "
+Введите имя и пароль от пользователя hacluster
+"
+fi
+}
+
+function infsetipms {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Enter the ip address of the PostgreSQL server. Information can be obtained by the command "ip a" (To display help information, enter "?")
+Example: 192.161.0.2
+"
+else
+echo "
+Введите IP-адрес сервера PostgreSQL. Информацию можно получить командой ip a (Для вывода справочной информации введите "?")
+Пример: 192.161.0.2
+"
+fi
+}
+
+
+function infsetips {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Enter the ip address of the gateway subnet.  (To display help information, enter "?")
+Example: 192.161.0.1
+"
+else
+echo "
+Введите IP-адрес шлюза подсети.  (Для вывода справочной информации введите "?")
+Пример: 192.161.0.1
+"
+fi
+}
+
+function infsetm {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Enter mask. Information can be obtained by the command "ip a", 192.168.0.4/24 (To display help information, enter "?")
+Example: 24
+"
+else
+echo "
+Введите маску подсети. Информацию можно получить командой ip a, 192.168.0.4/24 (Для вывода справочной информации введите "?")
+Пример: 24
+"
+fi
+}
+
+function infsetvnum {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Enter number version PostgreSQL.
+Example: 96 (numbers together 95, 96, 10, 11 ...)
+"
+else
+echo "
+Введите номер версии PostgreSQL как указано в примере.
+Пример: 96 (цифры слитно 95, 96, 11 и тд)
+"
+fi
+}
+
+function infsetpospas {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Enter password for postgres user (Postgres is a PostgreSQL database administrator)
+Example: pass
+"
+else
+echo "
+Введите password для пользователя postgres (Данный пользователь является администратором СУБД PostgreSQL)
+Пример: pass
+"
+fi
+}
+
+function infsetipvp {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Enter virtual IP-Address. (To display help information, enter "?")
+Example: 192.161.0.4
+"
+else
+echo "
+Введите виртуальный IP-адрес. (Для вывода справочной информации введите "?")
+Пример: 192.168.0.4
+"
+fi
+}
+
+function infsetipml {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Enter the IP address of the master-node. Information can be obtained by the command ip a. (To display help information, enter "?")
+Example: 192.168.0.2
+"
+else
+echo "
+Введите IP-адрес master-узла. Информацию можно получить командой ip a. (Для вывода справочной информации введите "?")
+Пример: 192.168.0.2
+"
+fi
+}
+
+function infsetipsl {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Enter the IP address of the slave-node. Information can be obtained by the command ip a. (To display help information, enter "?")
+Example: 192.168.0.3
+"
+else
+echo "
+Введите IP-адрес slave-узла. Информацию можно получить командой ip a. (Для вывода справочной информации введите "?")
+Пример: 192.168.0.3
+"
+fi
+}
+
+function infsetsi {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Enter the name of the network interface. Information can be obtained by the command "ip a". (To display help information, enter "?")
+Example: ens160
+"
+else
+echo "
+Введите имя сетевого интерфейса. Информацию можно получить командой ip a. (Для вывода справочной информации введите "?")
+Пример: ens160
+"
+fi
+}
+
+
+function infsetpg1 {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Enter the host name of the master-node specified in /etc/hosts. (Name must not contain special characters '"'!_-%'"' ...) 
+Example: pg1
+"
+else
+echo "
+Введите hostname master-узла указанный в /etc/hosts. (Имя не должно содержать спец.символов '"'!_-%'"' и т.д)
+Пример: pg1
+"
+fi
+}
+
+function infsetpg2 {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Enter the host name of the slave-node specified in /etc/hosts. (Name must not contain special characters '"'!_-%'"' ...) 
+Example: pg2
+"
+else
+echo "
+Введите hostname slave-узла указанный в /etc/hosts. (Имя не должно содержать спец.символов '"'!_-%'"' и т.д)
+Пример: pg2
+"
+fi
+}
+
+function infsetclname {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Enter name cluster PostgreSQL
+Example: my_cluster
+"
+else
+echo "
+Введите название кластера PostgreSQL
+Пример: my_cluster
+"
+fi
+}
+
+function infsetrp {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Enter password for replica user (User to replicate data)
+Example: pass
+"
+else
+echo "
+Введите password для пользователя replica (Данный пользователь будет осуществлять репликацию между узлами кластера)
+Пример: pass
+"
+fi
+}
+
+function infsethaclpas {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Enter password for hacluster user (User for cluster pacemaker)
+Example: pass
+"
+else
+echo "
+Введите password для пользователя hacluster (Данный пользователь управляет кластером PostgreSQL)
+Пример: pass
+"
+fi
+}
+
+function infsetto {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Enter the resource monitoring timeout value in seconds. (On virtualization, the recommended time is 180 seconds.) 
+Example: 180
+"
+else
+echo "
+Введите значение таймаута по мониторингу ресурсов в секундах. (На виртуализации рекомедуемое время 180 сек.)
+Пример: 180
+"
+fi
+}
+
+function infsetwal_level {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Enter value wal_level. (To display help information, enter "?")
+Valid value (hot_standby | archive | minimal)
+Example: hot_standby
+"
+else
+echo "
+Введите значение wal_level. (Для вывода справочной информации введите "?")
+Допустимые значения (hot_standby | archive | minimal)
+Пример: archive
+"
+fi
+}
+
+function infsethot_standby {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Enter value hot_standby. (To display help information, enter "?")
+Valid value (on|off)
+Example: on
+"
+else
+echo "
+Введите значение hot_standby. (Для вывода справочной информации введите "?")
+Допустимые значения (on|off)
+Пример: on
+"
+fi
+}
+
+function infsetlisten_addresses {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Enter value listen_addresses. (To display help information, enter "?")
+Valid value ( * , IP-Addresses )
+Example: *
+"
+else
+echo "
+Введите значение listen_addresses. (Для вывода справочной информации введите "?")
+Допустимые значения ( * , IP-адрес(а) )
+Пример: *
+"
+fi
+}
+
+function infsetmax_wal_senders {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Enter value max_wal_senders. (To display help information, enter "?")
+Valid value ( integer)
+Example: 3
+"
+else
+echo "
+Введите значение max_wal_senders. (Для вывода справочной информации введите "?")
+Допустимые значения ( цифры )
+Пример: 3
+"
+fi
+}
+
+function infsetmax_replication_slots {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Enter value max_replication_slots. (To display help information, enter "?")
+Valid value ( integer)
+Example: 3
+"
+else
+echo "
+Введите значение max_replication_slots. (Для вывода справочной информации введите "?")
+Допустимые значения ( цифры )
+Пример: 3
+"
+fi
+}
+
+function infsetnrf {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Enter the name of the cluster resource fence. (To display help information, enter "?")
+Example: vcenter-fence
+"
+else
+echo "
+Введите имя кластерного ресурса fence. (Для вывода справочной информации введите "?")
+Пример: vcenter-fence
+"
+fi
+}
+
+function infsetdnsvm {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Enter DNS VM VCenter. (To display help information, enter "?")
+Example: vcenter-01.vmware
+"
+else
+echo "
+Введите DNS VM VCenter. (Для вывода справочной информации введите "?")
+Пример: vcenter-01.vmware
+"
+fi
+}
+
+function infsetuservm {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Enter the login of the VM technical user with the rights to perform actions with PostgreSQL servers. (To display help information, enter "?")
+Attention! If the domain is used, specify the "domainname"\\\\\\\\"username"
+Example: domain\\\\\\\\uservm
+"
+else
+echo "
+Введите Login технического пользователя VM с правами выполнения действий с серверами PostgreSQL. (Для вывода справочной информации введите "?")
+ВАЖНО! Если используется домн, то указать имя так Domain"\\\\\\\\"username
+Пример: domain\\\\\\\\uservm
+"
+fi
+}
+
+function infsetpassvm {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Enter the password of the VM technical user with the rights to perform actions with PostgreSQL servers. (To display help information, enter "?"
+"
+else
+echo "
+Введите Password технического пользователя VM с правами выполнения действий с серверами PostgreSQL. (Для вывода справочной информации введите "?")
+Пример: passvm
+"
+fi
+}
+
+function infsetvmname1 {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Enter the name of the Master server virtual machine - $pg1:$h1. (To display help information, enter "?")
+Example: vmname1
+"
+else
+echo "
+Введите имя виртуальной машины сервера Master - $pg1:$h1. (Для вывода справочной информации введите "?")
+Пример: vmname1
+"
+fi
+}
+
+function infsetvmname2 {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Enter the name of the Slave server virtual machine - $pg2:$h2. (To display help information, enter "?")
+Example: vmname2
+"
+else
+echo "
+Введите имя виртуальной машины сервера Slave - $pg2:$h2. (Для вывода справочной информации введите "?")
+Пример: vmname2
+"
+fi
+}
+
+function infsetmas {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Configure optimization section
+
+1) Automatic optimization
+2) Manual optimization
+0) Do not execute
+"
+else
+echo "
+Раздел оптимизации настроек
+
+1) Автоматическая оптимизация
+2) Ручная оптимизация
+0) Не выполнять
+"
+fi
+}
+
+function infsetmoswkm {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Enter value work_mem "kB". (To display help information, enter "?")
+Valid value ( от 16384 до 131072 )
+Example: 16384
+"
+else
+echo "
+Введите значение work_mem в kB. (Для вывода справочной информации введите "?")
+Допустимые значения ( от 16384 до 131072 )
+Пример: 16384
+"
+fi
+}
+
+function infsetmosshb {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Enter value shared_buffer "MB". (To display help information, enter "?")
+Valid value ( integer )
+Example: 128
+"
+else
+echo "
+Введите значение shared_buffer в MB. (Для вывода справочной информации введите "?")
+Допустимые значения ( Целые числа )
+Пример: 128
+"
+fi
+}
+
+function infsetmoscct {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Enter value checkpoint_completion_target. (To display help information, enter "?")
+Valid value (integer, fractional numbers)
+Example: 0.9
+"
+else
+echo "
+Введите значение checkpoint_completion_target. (Для вывода справочной информации введите "?")
+Допустимые значения ( Целые числа, дробные числа )
+Пример: 0.9
+"
+fi
+}
+
+function infsetmosdst {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Enter value default_statistics_target. (To display help information, enter "?")
+Valid value ( integer )
+Example: 100
+"
+else
+echo "
+Введите значение default_statistics_target. (Для вывода справочной информации введите "?")
+Допустимые значения ( Целые числа )
+Пример: 100
+"
+fi
+}
+
+function infsetmosecs {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Enter value effective_cache_size "MB". (To display help information, enter "?")
+Valid value ( integer )
+Example: 128
+"
+else
+echo "
+Введите значение effective_cache_size в MB. (Для вывода справочной информации введите "?")
+Допустимые значения ( Целые числа )
+Пример: 128
+"
+fi
+}
+
+function infsetmosmxc {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Enter value max_connections. (To display help information, enter "?")
+Valid value ( Integer )
+Example: 100
+"
+else
+echo "
+Введите значение max_connections. (Для вывода справочной информации введите "?")
+Допустимые значения ( Число )
+Пример: 100
+"
+fi
+}
+
+function infsetmosmwm {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Enter value maintenance_work_mem MB. (To display help information, enter "?")
+Valid value ( integer )
+Example: 128
+"
+else
+echo "
+Введите значение maintenance_work_mem в MB. (Для вывода справочной информации введите "?")
+Допустимые значения ( Целые числа )
+Пример: 128
+"
+fi
+}
+
+function infsetmosmwp {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Enter value max_worker_processes. (To display help information, enter "?")
+Valid value ( integer )
+Example: 1
+"
+else
+echo "
+Введите значение max_worker_processes. (Для вывода справочной информации введите "?")
+Допустимые значения ( Целые числа )
+Пример: 1
+"
+fi
+}
+
+function infsetmosmpw {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Enter value max_parallel_workers. (To display help information, enter "?")
+Valid value ( integer )
+Example: 1
+"
+else
+echo "
+Введите значение max_parallel_workers. (Для вывода справочной информации введите "?")
+Допустимые значения ( Целые числа )
+Пример: 1
+"
+fi
+}
+
+function infsetmosmpwpg {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Enter value max_parallel_workers_per_gather. (To display help information, enter "?")
+Valid value ( integer )
+Example: 1
+"
+else
+echo "
+Введите значение max_parallel_workers_per_gather. (Для вывода справочной информации введите "?")
+Допустимые значения ( Целые числа )
+Пример: 1
+"
+fi
+}
+
+function infsetmosmiws {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Enter value min_wal_size "GB". (To display help information, enter "?")
+Valid value ( integer )
+Example: 2
+"
+else
+echo "
+Введите значение min_wal_size в GB. (Для вывода справочной информации введите "?")
+Допустимые значения ( Целые числа )
+Пример: 2
+"
+fi
+}
+
+function infsetmosmaws {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Enter value max_wal_size "GB". (To display help information, enter "?")
+Valid value ( integer )
+Example: 2
+"
+else
+echo "
+Введите значение max_wal_size в GB. (Для вывода справочной информации введите "?")
+Допустимые значения ( Целые числа )
+Пример: 2
+"
+fi
+}
+
+function infsetmosrpc {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Enter value random_page_cost. (To display help information, enter "?")
+Valid value ( integer )
+Example: 4
+"
+else
+echo "
+Введите значение random_page_cost. (Для вывода справочной информации введите "?")
+Допустимые значения ( Целые числа )
+Пример: 4
+"
+fi
+}
+
+function infsetmoseic {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Enter value effective_io_concurrency. (To display help information, enter "?")
+Valid value ( integer )
+Example: 2
+"
+else
+echo "
+Введите значение effective_io_concurrency. (Для вывода справочной информации введите "?")
+Допустимые значения ( Целые числа )
+Пример: 2
+"
+fi
+}
+
+function infsetmoswb {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Enter value wal_buffers "MB". (To display help information, enter "?")
+Valid value ( integer )
+Example: 16
+"
+else
+echo "
+Введите значение wal_buffers в MB. (Для вывода справочной информации введите "?")
+Допустимые значения ( Целые числа )
+Пример: 16
+"
+fi
+}
+
+function infyumin {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Installation takes a few minutes
+"
+else
+echo "
+Установка займет несколько минут
+"
+fi
+}
+
+function infyumer {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Installation aborted
+"
+else
+echo "
+Установка прервана
+"
+fi
+}
+
+function inferror {
+if [ $langlocale -eq 0 ]
+then
+echo "
+1) Bug fixed, continue the installation
+2) Abort the installation
+"
+else
+echo "
+1) Ошибка исправлена, можно продолжить установку
+2) Завершить установку
+"
+fi
+}
+
+function inf {
+if [ $langlocale -eq 0 ]
+then
+echo "
+
+"
+else
+echo "
+
+"
+fi
+}

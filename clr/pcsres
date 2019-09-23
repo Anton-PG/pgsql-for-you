@@ -1,0 +1,35 @@
+function resource_pcs {
+pcs  property set no-quorum-policy="ignore"
+pcs  property set stonith-enabled="false"
+pcs  resource defaults resource-stickiness="1000"
+pcs  resource defaults migration-threshold="3"
+pcs  resource create vip-master IPaddr2 \
+   ip="$vp"\
+   nic="$si"\
+   cidr_netmask="$m"\
+   op start   timeout="${to}s" interval="0s"  on-fail="restart"\
+   op monitor timeout="${to}s" interval="10s" on-fail="restart"\
+   op stop    timeout="${to}s" interval="0s"  on-fail="block"
+pcs resource create pgsql pgsql \
+   pgctl="/usr/pgsql-$n/bin/pg_ctl"\
+   psql="/usr/pgsql-$n/bin/psql"\
+   pgdata="/pgdata/data"\
+   rep_mode="sync"\
+   node_list="$h1 $h2"\
+   primary_conninfo_opt="keepalives_idle=60 keepalives_interval=5 keepalives_count=5 password=$rp"\
+   repuser=replica replication_slot_name=standby_slot2 \
+   master_ip="$vp"\
+   op start   timeout="${to}s" interval="0s"  on-fail="restart"\
+   op monitor timeout="${to}s" interval="4s"  on-fail="restart"\
+   op monitor timeout="${to}s" interval="3s"  on-fail="restart" role="Master"\
+   op promote timeout="${to}s" interval="0s"  on-fail="restart"\
+   op demote  timeout="${to}s" interval="0s"  on-fail="stop"\
+   op stop    timeout="${to}s" interval="0s"  on-fail="block"\
+   op notify  timeout="${to}s" interval="0s"
+ pcs  resource master msPostgresql pgsql \
+   master-max=1 master-node-max=1 clone-max=2 clone-node-max=1 notify=true
+ pcs  resource group add master-group vip-master
+ pcs  constraint colocation add master-group with Master msPostgresql INFINITY
+pcs  constraint order promote msPostgresql then start master-group symmetrical=false score=INFINITY
+pcs  constraint order demote  msPostgresql then stop  master-group symmetrical=false score=0
+}

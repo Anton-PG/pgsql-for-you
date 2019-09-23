@@ -1,0 +1,101 @@
+function shield {
+HOME=$(pwd)
+. $HOME/dep/shield.cfg
+. $HOME/dep/config.cfg
+
+
+if [ $shieldc -eq 0 ]
+        then
+		logshielder1
+                logshielder1 >> $HOME/log/error.log
+	else
+		logshieldok1
+                logshieldok1 >> $HOME/log/info.log
+fi
+
+if [ $shieldp -eq 0 ]
+	then 
+		logshielder2
+                logshielder2 >> $HOME/log/error.log
+	else
+		logshieldok2
+                logshieldok2 >> $HOME/log/info.log
+fi
+
+a1=$(cat /etc/hosts | grep -c "$pg1.*$h1")
+b1=$(cat /etc/hosts | grep -c "$pg2.*$h2")
+
+if [ $a1 -eq 1 ] && [ $b1 -eq 1 ]
+	then
+		logshieldok3
+		logshieldok3 >> $HOME/log/info.log
+		sed -i 's!shieldh1.*!shieldh1=1!g' dep/shield.cfg
+	else
+		logshielder3
+                logshielder3 >> $HOME/log/error.log
+		sed -i 's!shieldh1.*!shieldh1=0!g' dep/shield.cfg
+fi
+
+
+a2=`ssh  root@$pg2  -t "cat /etc/hosts | grep -c $pg1"`
+b2=`ssh  root@$pg2  -t "cat /etc/hosts | grep -c $pg2"`
+
+if [ $a1 -eq 1 ] && [ $b1 -eq 1 ]
+        then
+		logshieldok4
+                logshieldok4 >> $HOME/log/info.log
+		sed -i 's!shieldh2.*!shieldh2=1!g' dep/shield.cfg
+	else
+		logshielder4
+                logshielder4 >> $HOME/log/error.log
+		sed -i 's!shieldh2.*!shieldh2=1!g' dep/shield.cfg
+fi
+
+if ping -c 1 $vp
+        then
+                logshielder5
+                logshielder5 >> $HOME/log/error.log
+		sed -i 's!shieldvip.*!shieldvip=0!g' dep/shield.cfg
+        else
+		logshieldok5
+                logshieldok5 >> $HOME/log/info.log
+		sed -i 's!shieldvip.*!shieldvip=1!g' dep/shield.cfg
+fi
+
+pgi1=$(yum list installed | grep -c postgresql$nn*)
+pgi2=$(ssh root@$pg2 -t "yum list installed | grep -c postgresql$nn*")
+
+if [ $pgi1 -eq 0 ]
+        then
+                logshieldok6
+                logshieldok6 >> $HOME/log/info.log
+		sed -i 's!shieldi1.*!shieldi1=1!g' dep/shield.cfg
+        else
+                logshielder6
+                logshielder6 >> $HOME/log/error.log
+		sed -i 's!shieldi1.*!shieldi1=0!g' dep/shield.cfg
+fi
+
+if [ $pgi1 -eq 0 ]
+        then
+                logshieldok7
+                logshieldok7 >> $HOME/log/info.log
+		sed -i 's!shieldi2.*!shieldi2=1!g' dep/shield.cfg
+        else
+                logshielder7
+                logshielder7 >> $HOME/log/error.log
+		sed -i 's!shieldi2.*!shieldi2=0!g' dep/shield.cfg
+fi
+
+}
+
+function yumrepofind {
+repopg1=`yum list | grep -c ^postgresql${nn}`
+if [ $repopg1 -ge 3 ]
+	then
+		echo log1
+	else
+		echo err1
+fi
+}
+

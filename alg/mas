@@ -1,0 +1,36 @@
+function mas {
+        clear
+        while :
+        do
+
+infsetmas
+
+        read menu
+        case $menu in
+
+                1)
+		cp -rp ${HOME}/conf/sco.one ${HOME}/dep/sco.cfg
+		cp -rp ${HOME}/conf/arg.one ${HOME}/dep/arg.cfg 
+                aset
+		break
+                ;;
+
+                2)
+                mos
+		break
+                ;;
+
+		help)
+		echo "daset"
+		break	
+		;;
+
+                0)
+		echo "0"
+                break
+                ;;
+
+        esac
+        done
+clear
+}

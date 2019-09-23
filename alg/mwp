@@ -1,0 +1,54 @@
+function mwp {
+CPU=`cat /proc/cpuinfo|grep -c processor`
+b=`cat $HOME/dep/setp.cfg | grep -c "max_worker_processes"`
+a=`cat $HOME/dep/setp.cfg | grep -c "max_parallel_workers ="`
+c=`cat $HOME/dep/setp.cfg | grep -c "max_parallel_workers_per_gather"`
+if [ $CPU -eq 0 ]
+	then
+		sed -i '/.*max_parallel_workers .*/d' $HOME/dep/setp.cfg
+		sed -i '/.*max_parallel_workers_per_gather.*/d' $HOME/dep/setp.cfg
+		sed -i '/.*max_worker_processes.*/d' $HOME/dep/setp.cfg
+		
+	else
+	if [ $b -eq 0 ]
+        	then
+                	echo "max_worker_processes = '${CPU}'" >> $HOME/dep/setp.cfg
+                	sed -i 's!mwp.*!mwp='${CPU}'!g' dep/arg.cfg
+        	else
+                	sed -i 's!.*max_worker_processes.*!max_worker_processes = '"'${CPU}'"'!g'  $HOME/dep/setp.cfg
+                	sed -i 's!mwp.*!mwp='${CPU}'!g'  $HOME/dep/arg.cfg
+	fi
+
+	if [ $nn -ge 95 ]
+		then
+			sed -i '/.*max_parallel_workers .*/d' $HOME/dep/setp.cfg
+		else
+			if [ $a -eq 0 ]
+        			then
+                			echo "max_parallel_workers = '${CPU}'" >> $HOME/dep/setp.cfg
+                			sed -i 's!mpw=.*!mpw='${CPU}'!g' dep/arg.cfg
+        			else
+                			sed -i 's!.*max_parallel_workers =.*!max_parallel_workers = '"'${CPU}'"'!g' $HOME/dep/setp.cfg
+                			sed -i 's!mpw=.*!mpw='${CPU}'!g'  $HOME/dep/arg.cfg
+			fi
+	fi
+
+	e=`expr ${CPU} % 2 `
+	let mpwpg=$CPU/2+$e
+	if [ $nn -eq 95 ]
+			then
+				sed -i '/.*max_parallel_workers_per_gather.*/d' $HOME/dep/setp.cfg
+			else
+			if [ $c -eq 0 ]
+       				then
+        		        	echo "max_parallel_workers_per_gather = '${mpwpg}'" >> $HOME/dep/setp.cfg
+                			sed -i 's!mpwpg.*!mpwpg='${mpwpg}'!g'  $HOME/dep/arg.cfg
+        			else
+                			sed -i 's!.*max_parallel_workers_per_gather.*!max_parallel_workers_per_gather = '"'${mpwpg}'"'!g'  $HOME/dep/setp.cfg
+					sed -i 's!mpwpg.*!mpwpg='${mpwpg}'!g'  $HOME/dep/arg.cfg			
+fi
+	fi
+fi
+
+
+}

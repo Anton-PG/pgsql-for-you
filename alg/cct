@@ -1,0 +1,11 @@
+function cct {
+b=`cat $HOME/dep/setp.cfg | grep -c checkpoint_completion_target`
+if [ $b -eq 0 ]
+        then
+                echo "checkpoint_completion_target = '0.9'" >> $HOME/dep/setp.cfg
+                sed -i 's!cct.*!cct='0.9'!g' dep/arg.cfg
+        else
+                sed -i 's!.*checkpoint_completion_target.*!checkpoint_completion_target = '"'0.9'"'!g' dep/setp.cfg
+                sed -i 's!cct.*!cct='0.9'!g' dep/arg.cfg
+fi
+}

@@ -1,0 +1,78 @@
+
+source $HOME/doc/lparam
+function setc1 {
+clear
+cp -rp ${HOME}/conf/hban1.one ${HOME}/dep/hba.cfg
+cp -rp ${HOME}/conf/cfgn1.one ${HOME}/dep/config.cfg
+
+clear
+infsetipms
+
+read pg1
+while [ "$pg1" = "?" ]
+do
+				clear
+                                docipms;
+				read -s -n 1
+				clear
+				infsetipms
+				read -e -p `infvalue` pg1
+done
+sed -i 's/^pg1=\(.*\)/pg1='${pg1}'		##Server IP-Address/' ${HOME}/dep/config.cfg
+sed -i 's/H1/'$pg1'/g' ${HOME}/dep/hba.cfg
+clear
+
+infsetips
+read s
+while [ "$s" = "?" ]
+do				
+				clear
+                                docipsh;
+				read -s -n 1
+				clear
+				infsetips
+				read -e -p `infvalue` s
+done
+sed -i 's/^s=\(.*\)/s='${s}' 			##Gateway IP-Address/' ${HOME}/dep/config.cfg
+sed -i 's/H0/'${s}'/g' ${HOME}/dep/hba.cfg
+clear
+
+infsetm
+read m
+
+while [ "$m" = "?" ]
+do				clear
+                                docmask_m;
+				read -s -n 1
+				clear
+				infsetm
+                                read -e -p `infvalue` m
+done
+sed -i 's/^m=\(.*\)/m='${m}'				##Mask/' ${HOME}/dep/config.cfg
+sed -i 's/MS/'$m'/g' ${HOME}/dep/hba.cfg
+clear
+
+infsetvnum
+read vnum
+
+
+if [ $vnum -gt 93 ]
+	then
+onen=${vnum:0:1}
+twon=${vnum:1:1}
+onen=`echo $onen`
+
+sed -i 's/^n=\(.*\)/n='${onen}'.'${twon}' 				##Number version/' ${HOME}/dep/config.cfg
+sed -i 's/^nn=\(.*\)/nn='${onen}''${twon}' 				##Number version/' ${HOME}/dep/config.cfg
+sed -i 's/^nnn=\(.*\)/nnn='${onen}'_'${twon}'				##Number version/' ${HOME}/dep/config.cfg
+	else
+sed -i 's/^n=\(.*\)/n='${vnum}'				##Number version/' ${HOME}/dep/config.cfg
+sed -i 's/^nn=\(.*\)/nn='${vnum}'				##Number version/' ${HOME}/dep/config.cfg
+sed -i 's/^nnn=\(.*\)/nnn='${vnum}'				##Number version/' ${HOME}/dep/config.cfg
+fi
+
+clear
+infsetpospas
+read pospas
+sed -i 's/^pospas=\(.*\)/pospas='${pospas}' 			##Postgres user password/' ${HOME}/dep/config.cfg
+}

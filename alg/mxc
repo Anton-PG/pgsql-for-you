@@ -1,0 +1,25 @@
+function mxc {
+clear
+infsetmosmxc
+read -e -p `infvalue` -i "100" mxc
+while [ "$mxc" = "?" ]
+do
+				clear
+                                docmxc
+				read -s -n 1
+                                clear
+				infsetmosmxc
+                                read -e -p `infvalue` -i "100" mxc
+done
+
+b=`cat $HOME/dep/setp.cfg | grep -c max_connections`
+
+if [ $b -eq 0 ]
+	then 
+		echo "max_connections = '$mxc'" >> $HOME/dep/setp.cfg
+		sed -i 's!mxc.*!mxc='$mxc'!g' dep/arg.cfg
+	else
+		sed -i 's!.*max_connections.*!max_connections = '"'$mxc'"'!g' dep/setp.cfg
+		sed -i 's!mxc.*!mxc='$mxc'!g' dep/arg.cfg
+fi
+}

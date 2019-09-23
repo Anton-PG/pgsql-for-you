@@ -1,0 +1,268 @@
+function back1 {
+backfilecreate1
+backcopdays
+backsched
+backcopyscr1
+backcopypg
+backdir1
+backcron1
+backend1
+}
+
+function back2 {
+backfilecreate1
+backcopdays
+backsched
+backcopyscr1
+backcopyscr2
+backdir1
+backdir2
+backcron1
+backcron2
+backend1
+backend2
+}
+
+function backt1 {
+backfilecreate2
+backvpg
+backcopdays
+backcopyscr1
+backsched
+backarcht
+backeditparam
+backdir1
+backcron1
+backend1
+backendrest
+}
+
+function backt2 {
+backfilecreate2
+backvpg
+backcopdays
+backcopyscr1
+backcopyscr2
+backsched
+backarcht
+backeditparam
+backcopypg
+backdir1
+backdir2
+backcron1
+backcron2
+backend1
+backend2
+backendrest
+}
+
+function backfilecreate1 {
+cp -rp ${HOME}/conf/back.one ${HOME}/dep/backup.cfg
+clear
+}
+
+function backfilecreate2 {
+cp -rp ${HOME}/conf/backt.one ${HOME}/dep/backup.cfg
+clear
+}
+
+function backvpg {
+if [ $nn -lt 93 ]
+	then 
+		sed -i 's/LOG/'wal'/g' ${HOME}/dep/backup.cfg
+	else
+		sed -i 's/LOG/'xlog'/g' ${HOME}/dep/backup.cfg
+fi
+}
+
+function backcopdays {
+clear
+infbackgl
+read -e -p `infvalue` -i "2" cop
+while [ "$cop" = "?" ]
+do
+		clear
+                doccop;
+		read -s -n 1
+                clear
+		infbackgl
+                read  -e -p `infvalue` -i "2" cop
+
+done
+sed -i 's/DayC/'$cop'/g' ${HOME}/dep/backup.cfg
+
+clear
+}
+
+function backsched {
+infbacksched
+read -e -p `infvalue` -i "0 22 * * *" crn
+while [ "$crn" = "?" ]
+do
+		clear
+                doccrn;
+		read -s -n 1
+                clear
+		infbacksched
+                read  -e -p `infvalue` -i "0 22 * * *" crn				
+done
+clear
+}
+
+function backarcht {
+clear
+infbackat
+read -e -p `infvalue` -i "300" art
+while [ "$art" = "?" ]
+do
+		clear
+                docart;
+		read -s -n 1
+                clear
+		infbackat
+                read  -e -p `infvalue` -i "300" art
+done
+clear
+}
+
+function backdir1 {
+bac1f=`ls -la /pgdata/ | egrep -w -c backups`
+if [ $bac1f -eq 0 ]
+        then
+                mkdir -p /pgdata/backups/archive /pgdata/backups/archive_xlog
+		chown -R postgres:postgres /pgdata/backups
+fi
+
+}
+
+function backdir2 {
+bac2f=`ssh root@$pg2 'ls -la /pgdata/ | egrep -w -c backups'`
+if [ $bac2f -eq 0 ]
+        then
+                ssh root@$pg2 'mkdir -p /pgdata/backups/archive /pgdata/backups/archive_xlog'
+		ssh root@$pg2 'chown -R postgres:postgres /pgdata/backups'
+fi
+}
+
+function backsedam {
+	if [ $am -eq 0 ]
+		then
+			echo "archive_mode = 'on'" >> /pgdata/data/postgresql.auto.conf
+		else
+			sed -i 's/archive_mode.*/archive_mode = '"'on'"'/' /pgdata/data/postgresql.auto.conf
+	fi
+}
+
+function backsedac {
+if [ $ac -eq 0 ]
+                then
+                        echo "archive_command = 'test ! -f /pgdata/backups/archive_xlog/%f && cp %p /pgdata/backups/archive_xlog/%f'" >> /pgdata/data/postgresql.auto.conf
+                else
+                        sed -i 's!archive_command.*!"archive_command = 'test ! -f /pgdata/backups/archive_xlog/%f && cp %p /pgdata/backups/archive_xlog/%f'"!' /pgdata/data/postgresq.auto.conf
+        fi
+}
+
+function backsedat {
+if [ $at -eq 0 ]
+                then
+                        echo "archive_timeout = '${art}'" >> /pgdata/data/postgresql.auto.conf
+                else
+                        sed -i 's/archive_timeout.*/archive_timeout = '"'${art}'"'/' /pgdata/data/postgresql.auto.conf
+        fi
+		}
+
+function backcopypg {
+scp /pgdata/data/postgresql.auto.conf root@$pg2:/pgdata/data/postgresql.auto.conf
+ssh root@$pg2 -c 'chown postgres:postgres /pgdata/data/postgresql.auto.conf'
+}
+
+function backcopyscr1 {
+cp -rp  ${HOME}/dep/backup.cfg /pgdata/backupPG.sh
+chmod +x /pgdata/backupPG.sh
+chown postgres:postgres /pgdata/backupPG.sh
+}
+
+function backcopyscr2 {
+scp /pgdata/backupPG.sh root@$pg2:/pgdata/backupPG.sh
+ssh  root@$pg2  -t "chmod +x /pgdata/backupPG.sh"
+ssh  root@$pg2  -t "chown postgres:postgres /pgdata/backupPG.sh"
+}
+
+function backcron1 {
+su - postgres -c "crontab -l > /pgdata/cron1.cfg"
+gr1=`cat /pgdata/cron1.cfg | grep -c backupPG.sh`
+if [ ${gr1} -eq 0 ]
+	then
+		echo "$crn /pgdata/backupPG.sh  #Backup PostgreSQL $n" >> /pgdata/cron1.cfg
+		su - postgres -c "crontab /pgdata/cron1.cfg"
+		xe=`echo "Job added to crontab on server '${pg1}'"`
+	else
+		sed  -i 's!.*backupPG.*!'"$crn"' /pgdata/backupPG.sh #Backup PostgreSQL '$n'!g' /pgdata/cron1.cfg
+		xe=`echo "Job changed in crontab on server '${pg1}'"`
+		su - postgres -c "crontab /pgdata/cron1.cfg"
+fi
+rm -rf /pgdata/cron1.cfg
+}
+
+function backcron2 {
+ssh  root@$pg2  -t "su - postgres -c 'crontab -l > /pgdata/cron2.cfg'"
+scp  root@$pg2:/pgdata/cron2.cfg /pgdata/cron2.cfg
+gr2=`cat /pgdata/cron2.cfg | grep -c backupPG.sh`
+if [ ${gr2} -eq 0 ]
+        then
+		echo "$crn /pgdata/backupPG.sh #Backup PostgreSQL $n" >> /pgdata/cron2.cfg
+		scp /pgdata/cron2.cfg root@$pg2:/pgdata/cron2.cfg
+		ssh  root@$pg2  -t "su - postgres -c 'crontab /pgdata/cron2.cfg'"
+		ye=`echo "Job added to crontab on server '${pg2}'"`
+
+	else
+		sed  -i 's!.*backupPG.*!'"$crn"' /pgdata/backupPG.sh #Backup PostgreSQL '$n'!g' /pgdata/cron2.cfg
+                ye=`echo "Job changed in crontab on server '${pg2}'"`
+		scp /pgdata/cron2.cfg root@$pg2:/pgdata/cron2.cfg
+		ssh  root@$pg2  -t "su - postgres -c 'crontab  /pgdata/cron2.cfg'"
+fi
+rm -rf /pgdata/cron2.cfg
+ssh  root@$pg2  -t 'rm /pgdata/cron2.cfg'
+}
+
+function backend1 {
+clear
+echo $xe
+}
+
+function backend2 {
+echo $ye
+}
+
+function backendrest {
+echo "Restart  all instances PostgreSQL"
+}
+
+function backeditparam {
+ac=`cat /pgdata/data/postgresql.auto.conf | grep -c 'archive_command';`
+am=`cat /pgdata/data/postgresql.auto.conf | grep -c 'archive_mode';`
+at=`cat /pgdata/data/postgresql.auto.conf | grep -c 'archive_timeout';`
+
+	if [ $am -eq 0 ]
+		then
+			echo "archive_mode = 'on'" >> /pgdata/data/postgresql.auto.conf
+		else
+			sed -i 's/archive_mode.*/archive_mode = '"'on'"'/' /pgdata/data/postgresql.auto.conf
+	fi
+
+	 if [ $ac -eq 0 ]
+                then
+                        echo "archive_command = 'test ! -f /pgdata/backups/archive_xlog/%f && cp %p /pgdata/backups/archive_xlog/%f'" >> /pgdata/data/postgresql.auto.conf
+                else
+                        sed -i 's!archive_command.*!"archive_command = 'test ! -f /pgdata/backups/archive_xlog/%f && cp %p /pgdata/backups/archive_xlog/%f'"!' /pgdata/data/postgresq.auto.conf
+        fi
+
+if [ $at -eq 0 ]
+                then
+                        echo "archive_timeout = '${art}'" >> /pgdata/data/postgresql.auto.conf
+                else
+                        sed -i 's/archive_timeout.*/archive_timeout = '"'${art}'"'/' /pgdata/data/postgresql.auto.conf
+        fi
+
+}
+

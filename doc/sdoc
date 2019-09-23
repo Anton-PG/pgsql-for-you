@@ -1,0 +1,1052 @@
+
+function docart {
+if [ $langlocale -eq 0 ]
+then
+echo "
+archive_timeout (integer)
+The archive_command is only invoked for completed WAL segments. Hence, if your server generates little WAL traffic (or has slack periods where it does so), there could be a long delay between the completion of a transaction and its safe recording in archive storage. To limit how old unarchived data can be, you can set archive_timeout to force the server to switch to a new WAL segment file periodically. When this parameter is greater than zero, the server will switch to a new segment file whenever this many seconds have elapsed since the last segment file switch, and there has been any database activity, including a single checkpoint. (Increasing checkpoint_timeout will reduce unnecessary checkpoints on an idle system.) Note that archived files that are closed early due to a forced switch are still the same length as completely full files. Therefore, it is unwise to use a very short archive_timeout — it will bloat your archive storage. archive_timeout settings of a minute or so are usually reasonable. You should consider using streaming replication, instead of archiving, if you want data to be copied off the master server more quickly than that. This parameter can only be set in the postgresql.conf file or on the server command line.
+
+Information taken from www.postgresql.org
+To exit, press any key
+"
+else
+echo "
+archive_timeout (integer)
+Команда archive_command вызывается только для завершённых сегментов WAL. Поэтому, если ваш сервер записывает мало данных WAL (или это наблюдается в некоторые периоды времени), от завершения транзакции до надёжного сохранения её в архивном хранилище может пройти довольно много времени. Для ограничения времени существования неархивированных данных можно установить значение archive_timeout, чтобы сервер периодически переключался на новый файл сегмента WAL. Когда этот параметр больше нуля, сервер будет переключаться на новый файл сегмента, если с момента последнего переключения на новый файл пройдёт заданное число секунд, и наблюдалась какая-то активность базы данных, даже если это была просто контрольная точка. (Для сокращения числа ненужных контрольных точек в простаивающей системе можно увеличить checkpoint_timeout.) Заметьте, что архивируемые файлы, закрываемые раньше из-за принудительного переключения, всё равно будут иметь тот же размер, что и полностью заполненные. Поэтому устанавливать для archive_timeout очень маленькое значение неразумно — это ведёт к замусориванию архивного хранилища. Обычно для archive_timeout имеет смысл задавать значение около минуты. Если вам нужно, чтобы данные копировались с главного сервера быстрее, вам следует подумать о переходе от архивации к потоковой репликации. Этот параметр можно задать только в postgresql.conf или в командной строке при запуске сервера.
+
+Информация взята с сайта www.postgrespro.ru
+Для выхода введите любое значение.
+"
+fi
+}
+
+function dochs {
+if [ $langlocale -eq 0 ]
+then
+echo "
+hot_standby (boolean)
+Specifies whether or not you can connect and run queries during recovery, as described in Section 25.5. The default value is off. This parameter can only be set at server start. It only has effect during archive recovery or in standby mode.
+
+Information taken from www.postgresql.org
+To exit, press any key
+"
+else
+echo "
+hot_standby (boolean)
+Определяет, можно ли будет подключаться к серверу и выполнять запросы в процессе восстановления, как описано в Разделе 25.5. Значение по умолчанию — on (подключения разрешаются). Задать этот параметр можно только при запуске сервера. Данный параметр играет роль только в режиме ведомого сервера или при восстановлении архива.
+
+Информация взята с сайта www.postgrespro.ru
+Для выхода введите любое значение.
+"
+fi
+}
+
+function docwl {
+if [ $langlocale -eq 0 ]
+then
+echo "
+wal_level (enum)
+wal_level determines how much information is written to the WAL. The default value is minimal, which writes only the information needed to recover from a crash or immediate shutdown. archive adds logging required for WAL archiving, and hot_standby further adds information required to run read-only queries on a standby server. This parameter can only be set at server start.
+
+In minimal level, WAL-logging of some bulk operations can be safely skipped, which can make those operations much faster (see Section 14.4.7). Operations in which this optimization can be applied include:
+
+CREATE TABLE AS
+CREATE INDEX
+CLUSTER
+COPY into tables that were created or truncated in the same transactionBut minimal WAL does not contain enough information to reconstruct the data from a base backup and the WAL logs, so either archive or hot_standby level must be used to enable WAL archiving (archive_mode) and streaming replication.
+In hot_standby level, the same information is logged as with archive, plus information needed to reconstruct the status of running transactions from the WAL. To enable read-only queries on a standby server, wal_level must be set to hot_standby on the primary, and hot_standby must be enabled in the standby. It is thought that there is little measurable difference in performance between using hot_standby and archive levels, so feedback is welcome if any production impacts are noticeable.
+
+Information taken from www.postgresql.org
+To exit, press any key
+"
+else
+echo "
+Параметр wal_level определяет, как много информации записывается в WAL. Со значением minimal (по умолчанию) в журнал записывается только информация, необходимая для восстановления после сбоя или аварийного отключения. Вариант archive добавляет информацию, необходимую для архивирования WAL; hot_standby включает дополнительную информацию, необходимую для выполнения запросов на резервном сервере в режиме «только чтение»; и наконец, logical добавляет информацию, требуемую для поддержки логического декодирования. Каждый последующий уровень включают всю информацию, записываемую на всех предыдущих. Задать этот параметр можно только при запуске сервера.
+
+На уровне minimal некоторые массовые операции могут выполняться в обход журнала без риска потери данных, и при этом они выполнятся гораздо быстрее (см. Подраздел. В частности, такая оптимизация возможна с операциями:
+
+CREATE TABLE AS
+CREATE INDEX
+CLUSTER
+COPY с таблицами, которые были созданы или опустошены в той же транзакции
+Однако такой минимальный журнал не будет содержать достаточно информации для восстановления данных из базовой копии и журналов, поэтому для реализации стратегии архивации WAL (см. archive_mode) и потоковой репликации необходим уровень archive или более высокий.
+
+На уровне hot_standby в журнал записывается та же информация, что и на уровне archive, плюс информация, необходимая для восстановления состояния работающих транзакций из WAL. Чтобы на резервном сервере можно было выполнять запросы «только на чтение», на ведущем wal_level должен быть не ниже hot_standby, а на резервном необходимо установить параметр hot_standby. По нашему убеждению, уровни hot_standby и archive не должны значительно отличаться по быстродействию, поэтому если в вашей среде проявятся серьёзные различия, мы хотели бы узнать об этом.
+
+На уровне logical в журнал записывается та же информация, что и на уровне hot_standby, плюс информация, необходимая для извлечения из журнала наборов логических изменений. Повышение уровня до logical приводит к значительному увеличению объёма WAL, особенно если многие таблицы имеют характеристику REPLICA IDENTITY FULL и выполняется множество команд UPDATE и DELETE.
+
+Информация взята с сайта www.postgrespro.ru
+Для выхода введите любое значение.
+"
+fi
+}
+
+function doccop {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Enter the number of days as an integer
+
+Old backups are deleted after creating a new backup. If a new backup has not been created, the old backup will not be deleted..
+When setting “2”, backups older than two days will be deleted.
+
+If there is not enough free disk space, then a backup copy will not be created
+
+All events that occurred during the backup process are logged. ${PGDATA}/data/pg_log/postgresql_%_%_% or ${PGDATA}/data/log/postgresql_%_%_% (Depends on PostgreSQL version)
+-------------------------------------------------------
+
+If backup with transaction log storage is selected, setting the parameter will affect clearing the transaction log
+To exit, press any key
+"
+else
+echo "
+Колличество дней указывается целыми числами.
+
+Удаление старых бекапов выполняется после формирования новой копии. Если новый бекап не был сформирован, то и удаление старого бекапа не произойдет.
+При установке параметра например "2", по рассписанию в крон будет удалены копии старше 2-х дней начиная от текущего времени создания бекапа.
+
+Перед формированием бекапа выполняется расчет свободного места, и вслучае если места под бекап не будет хватать, то он не сформируется
+
+Ситуации и причины не сформированного бекапа логируются в ${PGDATA}/data/pg_log/postgresql_%_%_% или ${PGDATA}/data/log/postgresql_%_%_% (В зависимости от выбранной версии PostgreSQL)
+-------------------------------------------------------
+
+В случае если была выбрана настройка с хранением архивов транзакционных логов, то данная настройка затронет и удаление старых транзакционных логов.
+
+Для выхода введите любое значение.
+"
+fi
+}
+
+function doccrn {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Cron is driven by a crontab (cron table) file, a configuration file that specifies shell commands to run periodically on a given schedule. The crontab files are stored where the lists of jobs and other instructions to the cron daemon are kept. Users can have their own individual crontab files and often there is a system-wide crontab file (usually in /etc or a subdirectory of /etc) that only system administrators can edit.
+
+Each line of a crontab file represents a job, and looks like this:
+
+# ┌───────────── minute (0 - 59)
+# │ ┌───────────── hour (0 - 23)
+# │ │ ┌───────────── day of the month (1 - 31)
+# │ │ │ ┌───────────── month (1 - 12)
+# │ │ │ │ ┌───────────── day of the week (0 - 6) (Sunday to Saturday;
+# │ │ │ │ │                                   7 is also Sunday on some systems)
+# │ │ │ │ │
+# │ │ │ │ │
+# * * * * * command to execute
+
+To exit, press any key
+"
+else
+echo "
+1) Минута - время в минутах от 0 до 59
+2) Час - от 0 до 23
+3) День - день месяца от 1 до 31
+4) Месяц - от 1 до 12 либо буквенные обозначения jan - dec
+5) День недели - от 0 до 6 (0 - воскресенье) или sat - sun
+
+!ВАЖНО: указывайте обязательно 1 значение "0" не оставляйте "*", это приведет к тому, что задание будет выполняться каждую минуту указанного часа.
+
+Each line of a crontab file represents a job, and looks like this:
+
+# ┌───────────── minute (0 - 59)
+# │ ┌───────────── hour (0 - 23)
+# │ │ ┌───────────── day of the month (1 - 31)
+# │ │ │ ┌───────────── month (1 - 12)
+# │ │ │ │ ┌───────────── day of the week (0 - 6) (Sunday to Saturday;
+# │ │ │ │ │                                   7 is also Sunday on some systems)
+# │ │ │ │ │
+# │ │ │ │ │
+# * * * * * command to execute
+
+Примеры использования Cron
+
+0 22 * * *     - запуск задания каждый день в 22:00
+0 8-19/2 * * 1 - означает что каждый второй час с 8 до 19 (8, 10,12,14,16) по понедельникам запускать задание.
+* 10-15 * * *  - строка приведет к запуску задания каждую минуту в диапазоне с 10 до 15 часов
+0 10-15 * * *  - Данная запись позволит запускать задание в начале каждого часа указанного диапазона.
+
+!КАК не нужно делать
+     * 22 * * *
+
+Для выхода введите любое значение."
+
+fi
+}
+
+function docla {
+if [ $langlocale -eq 0 ]
+then
+echo "
+listen_addresses (string)
+Specifies the TCP/IP address(es) on which the server is to listen for connections from client applications. The value takes the form of a comma-separated list of host names and/or numeric IP addresses. The special entry * corresponds to all available IP interfaces. The entry 0.0.0.0 allows listening for all IPv4 addresses and :: allows listening for all IPv6 addresses. If the list is empty, the server does not listen on any IP interface at all, in which case only Unix-domain sockets can be used to connect to it. The default value is localhost, which allows only local TCP/IP "loopback" connections to be made. While client authentication (Chapter 19) allows fine-grained control over who can access the server, listen_addresses controls which interfaces accept connection attempts, which can help prevent repeated malicious connection requests on insecure network interfaces. This parameter can only be set at server start.
+
+Information taken from www.postgresql.org
+To exit, press any key
+"
+else
+echo "
+listen_addresses (string)
+Задаёт адреса TCP/IP, по которым сервер будет принимать подключения клиентских приложений. Это значение принимает форму списка, разделённого запятыми, из имён и/или числовых IP-адресов компьютеров. Особый элемент, *, обозначает все имеющиеся IP-интерфейсы. Запись 0.0.0.0 позволяет задействовать все адреса IPv4, а :: — все адреса IPv6. Если список пуст, сервер не будет привязываться ни к какому IP-интерфейсу, а значит, подключиться к нему можно будет только через Unix-сокеты. По умолчанию этот параметр содержит localhost, что допускает подключение к серверу по TCP/IP только через локальный интерфейс «замыкания». Хотя механизм аутентификации клиентов  позволяет гибко управлять доступом пользователей к серверу, параметр listen_addresses может ограничить интерфейсы, через которые будут приниматься соединения, что бывает полезно для предотвращения злонамеренных попыток подключения через незащищённые сетевые интерфейсы. Этот параметр можно задать только при запуске сервера.
+
+Информация взята с сайта www.postgrespro.ru
+Для выхода введите любое значение.
+"
+fi
+}
+
+function docmrs {
+if [ $langlocale -eq 0 ]
+then
+echo "
+max_replication_slots (integer)
+Specifies the maximum number of replication slots (see Section 26.2.6) that the server can support. The default is 10. This parameter can only be set at server start. wal_level must be set to replica or higher to allow replication slots to be used. Setting it to a lower value than the number of currently existing replication slots will prevent the server from starting.
+
+Information taken from www.postgresql.org
+To exit, press any key
+"
+else
+echo "
+max_replication_slots (integer)
+Задаёт максимальное число слотов репликации, которое сможет поддерживать сервер. Значение по умолчанию — ноль. Этот параметр можно задать только при запуске сервера. Чтобы эти слоты репликации можно было использовать, уровень wal_level должен быть archive или выше. Если заданное значение данного параметра будет меньше, чем число уже существующих слотов репликации, сервер не запустится.
+
+Информация взята с сайта www.postgrespro.ru
+Для выхода введите любое значение.
+"
+fi
+}
+
+function docmws {
+if [ $langlocale -eq 0 ]
+then
+echo "
+max_wal_senders (integer)
+Specifies the maximum number of concurrent connections from standby servers or streaming base backup clients (i.e., the maximum number of simultaneously running WAL sender processes). The default is zero, meaning replication is disabled. WAL sender processes count towards the total number of connections, so the parameter cannot be set higher than max_connections. This parameter can only be set at server start. wal_level must be set to archive or hot_standby to allow connections from standby servers.
+
+
+Information taken from www.postgresql.org
+To exit, press any key
+"
+else
+echo "
+max_wal_senders (integer)
+Задаёт максимально допустимое число одновременных подключений резервных серверов или клиентов потокового копирования (т. е. максимальное количество одновременно работающих процессов передачи WAL). По умолчанию это значение равно нулю, то есть репликация отключается. Передающие WAL процессы учитываются в общем числе соединений, так что этот параметр не может превышать max_connections. В случае неожиданного отключения клиента потоковой передачи слот подключения может оставаться занятым до достижения тайм-аута, так что этот параметр должен быть немного больше максимального ожидаемого числа клиентов, чтобы отключившиеся клиенты могли переподключиться немедленно. Задать этот параметр можно только при запуске сервера. Чтобы к данному серверу могли подключаться резервные, уровень wal_level должен быть archive или выше.
+
+Информация взята с сайта www.postgrespro.ru
+Для выхода введите любое значение.
+"
+fi
+}
+
+function docmxc {
+if [ $langlocale -eq 0 ]
+then
+echo "
+max_connections (integer)
+Determines the maximum number of concurrent connections to the database server. The default is typically 100 connections, but might be less if your kernel settings will not support it (as determined during initdb). This parameter can only be set at server start.
+
+When running a standby server, you must set this parameter to the same or higher value than on the master server. Otherwise, queries will not be allowed in the standby server.
+
+Information taken from www.postgresql.org
+To exit, press any key
+"
+else
+echo "
+max_connections
+Определяет максимальное число одновременных подключений к серверу БД. По умолчанию обычно это 100 подключений, но это число может быть меньше, если ядро накладывает свои ограничения (это определяется в процессе initdb). Этот параметр можно задать только при запуске сервера.
+
+Для ведомого сервера значение этого параметра должно быть больше или равно значению на ведущем. В противном случае на ведомом сервере не будут разрешены запросы.
+
+Советую выставлять +3, так как локальный вход в консоль тоже расходует данный параметр. И по умолчанию параметр superuser_reserved_connections = 3, это не позволит использовать под работу приложения 3 коннекта. По этой причине если вам необходимо получить 100 коннектов, то выставлять Max_Con + 3.
+
+Информация взята с сайта www.postgrespro.ru
+Для выхода введите любое значение.
+"
+fi
+}
+
+function docwkm {
+if [ $langlocale -eq 0 ]
+then
+echo "
+work_mem (integer)
+Specifies the amount of memory to be used by internal sort operations and hash tables before writing to temporary disk files. The value defaults to four megabytes (4MB). Note that for a complex query, several sort or hash operations might be running in parallel; each operation will be allowed to use as much memory as this value specifies before it starts to write data into temporary files. Also, several running sessions could be doing such operations concurrently. Therefore, the total memory used could be many times the value of work_mem; it is necessary to keep this fact in mind when choosing the value. Sort operations are used for ORDER BY, DISTINCT, and merge joins. Hash tables are used in hash joins, hash-based aggregation, and hash-based processing of IN subqueries.
+
+Information taken from www.postgresql.org
+To exit, press any key
+"
+else
+echo "
+work_mem
+
+Индивидуальный параметр для каждой СУБД.
+
+Задаёт объём памяти, который будет использоваться для внутренних операций сортировки и хеш-таблиц, прежде чем будут задействованы временные файлы на диске. Значение по умолчанию — четыре мегабайта (4MB). Заметьте, что в сложных запросах одновременно могут выполняться несколько операций сортировки или хеширования, так что этот объём памяти будет доступен для каждой операции. Кроме того, такие операции могут выполняться одновременно в разных сеансах. Таким образом, общий объём памяти может многократно превосходить значение work_mem; это следует учитывать, выбирая подходящее значение. Операции сортировки используются для ORDER BY, DISTINCT и соединений слиянием. Хеш-таблицы используются при соединениях и агрегировании по хешу, а также обработке подзапросов IN с применением хеша.
+
+Обычно рекомендованные настройки от 16 до 128МБ
+
+Информация взята с сайта www.postgrespro.ru
+Для выхода введите любое значение.
+"
+fi
+}
+
+function docipm {
+if [ $langlocale -eq 0 ]
+then
+
+echo -e "
+You must enter the IP address of the master
+
+bash:#ip a
+
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN qlen 1
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+2:  ens160: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP qlen 1000
+    link/ether 00:00:56:b7:08:c0 brd ff:ff:ff:ff:ff:ff
+    inet \033[1m192.168.0.2\033[0m/24 brd 192.168.0.2. scope global ens160
+       valid_lft forever preferred_lft forever
+3: v13: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN qlen 1000
+    link/ether 00:00:00:be:53:fe brd ff:ff:ff:ff:ff:ff
+    inet 192.168.111.1/24 brd 192.168.111.255 scope global v13
+       valid_lft forever preferred_lft forever
+4: v13-nic: <BROADCAST,MULTICAST> mtu 1500 qdisc pfifo_fast master v130 state DOWN qlen 1000
+    link/ether 52:54:00:be:53:fe brd ff:ff:ff:ff:ff:ff
+
+To exit, press any key"
+
+else
+
+echo -e "
+В данном пункте необходимо ввести IP-Адрес с мастер-узла
+IP-Адрес выделен.
+
+bash:#ip a
+
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN qlen 1
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+2:  ens160: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP qlen 1000
+    link/ether 00:00:56:b7:08:c0 brd ff:ff:ff:ff:ff:ff
+    inet \033[1m192.168.0.2\033[0m/24 brd 192.168.0.2. scope global ens160
+       valid_lft forever preferred_lft forever
+3: v13: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN qlen 1000
+    link/ether 00:00:00:be:53:fe brd ff:ff:ff:ff:ff:ff
+    inet 192.168.111.1/24 brd 192.168.111.255 scope global v13
+       valid_lft forever preferred_lft forever
+4: v13-nic: <BROADCAST,MULTICAST> mtu 1500 qdisc pfifo_fast master v130 state DOWN qlen 1000
+    link/ether 52:54:00:be:53:fe brd ff:ff:ff:ff:ff:ff
+
+Для выхода введите любое значение."
+
+fi
+}
+
+function docips {
+if [ $langlocale -eq 0 ]
+then
+
+echo -e "
+You must enter the IP address of the master
+
+bash:#ip a
+
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN qlen 1
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+2:  ens160: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP qlen 1000
+    link/ether 00:00:56:b7:08:c0 brd ff:ff:ff:ff:ff:ff
+    inet \033[1m192.168.0.3\033[0m/24 brd 192.168.0.3. scope global ens160
+       valid_lft forever preferred_lft forever
+3: v13: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN qlen 1000
+    link/ether 00:00:00:be:53:fe brd ff:ff:ff:ff:ff:ff
+    inet 192.168.111.1/24 brd 192.168.111.255 scope global v13
+       valid_lft forever preferred_lft forever
+4: v13-nic: <BROADCAST,MULTICAST> mtu 1500 qdisc pfifo_fast master v130 state DOWN qlen 1000
+    link/ether 52:54:00:be:53:fe brd ff:ff:ff:ff:ff:ff
+
+To exit, press any key"
+
+else
+
+echo -e "
+В данном пункте необходимо ввести IP-Адрес с слейв-узла
+IP-Адрес выделен.
+
+bash:#ip a
+
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN qlen 1
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+2:  ens160: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP qlen 1000
+    link/ether 00:00:56:b7:08:c0 brd ff:ff:ff:ff:ff:ff
+    inet \033[1m192.168.0.3\033[0m/24 brd 192.168.0.3. scope global ens160
+       valid_lft forever preferred_lft forever
+3: v13: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN qlen 1000
+    link/ether 00:00:00:be:53:fe brd ff:ff:ff:ff:ff:ff
+    inet 192.168.111.1/24 brd 192.168.111.255 scope global v13
+       valid_lft forever preferred_lft forever
+4: v13-nic: <BROADCAST,MULTICAST> mtu 1500 qdisc pfifo_fast master v130 state DOWN qlen 1000
+    link/ether 52:54:00:be:53:fe brd ff:ff:ff:ff:ff:ff
+
+Для выхода введите любое значение."
+
+fi
+}
+
+function docipsh {
+if [ $langlocale -eq 0 ]
+then
+
+echo -e "
+You must enter the IP address of the gateway
+
+bash:# ip route  grep default
+
+default via \033[1m192.168.0.1\033[0m dev ens160  proto static  metric 100
+
+To exit, press any key.
+"
+else
+
+echo -e "
+В данном пункте необходимо ввести IP-Адрес шлюза
+
+bash:# ip route  grep default
+
+default via \033[1m192.168.0.1\033[0m dev ens160  proto static  metric 100
+
+Для выхода введите любое значение.
+"
+
+fi
+}
+
+
+function docmask_m {
+if [ $langlocale -eq 0 ]
+then
+
+echo -e "
+You must enter the subnet mask
+
+bash:#ip a
+
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN qlen 1
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+2:  ens160: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP qlen 1000
+    link/ether 00:00:56:b7:08:c0 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.0.3/\033[1m24\033[0m brd 192.168.0.3. scope global ens160
+       valid_lft forever preferred_lft forever
+3: v13: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN qlen 1000
+    link/ether 00:00:00:be:53:fe brd ff:ff:ff:ff:ff:ff
+    inet 192.168.111.1/24 brd 192.168.111.255 scope global v13
+       valid_lft forever preferred_lft forever
+4: v13-nic: <BROADCAST,MULTICAST> mtu 1500 qdisc pfifo_fast master v130 state DOWN qlen 1000
+    link/ether 52:54:00:be:53:fe brd ff:ff:ff:ff:ff:ff
+
+To exit, press any key.
+"
+else
+
+echo -e "
+В данном пункте необходимо ввести маску подсети
+маска выделена.
+
+bash:#ip a
+
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN qlen 1
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+2:  ens160: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP qlen 1000
+    link/ether 00:00:56:b7:08:c0 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.0.3/\033[1m24\033[0m brd 192.168.0.3. scope global ens160
+       valid_lft forever preferred_lft forever
+3: v13: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN qlen 1000
+    link/ether 00:00:00:be:53:fe brd ff:ff:ff:ff:ff:ff
+    inet 192.168.111.1/24 brd 192.168.111.255 scope global v13
+       valid_lft forever preferred_lft forever
+4: v13-nic: <BROADCAST,MULTICAST> mtu 1500 qdisc pfifo_fast master v130 state DOWN qlen 1000
+    link/ether 52:54:00:be:53:fe brd ff:ff:ff:ff:ff:ff
+
+Для выхода введите любое значение.
+"
+fi
+}
+
+function docname_ip {
+if [ $langlocale -eq 0 ]
+then
+
+echo -e "
+You must enter the name subnet
+
+bash:#ip a
+
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN qlen 1
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+2:  \033[1mens160\033[0m: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP qlen 1000
+    link/ether 00:00:56:b7:08:c0 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.0.3/24 brd 192.168.0.3. scope global ens160
+       valid_lft forever preferred_lft forever
+3: v13: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN qlen 1000
+    link/ether 00:00:00:be:53:fe brd ff:ff:ff:ff:ff:ff
+    inet 192.168.111.1/24 brd 192.168.111.255 scope global v13
+       valid_lft forever preferred_lft forever
+4: v13-nic: <BROADCAST,MULTICAST> mtu 1500 qdisc pfifo_fast master v130 state DOWN qlen 1000
+    link/ether 52:54:00:be:53:fe brd ff:ff:ff:ff:ff:ff
+
+To exit, press any key.
+"
+
+else
+
+echo -e "
+В данном пункте необходимо ввести название сетевого интерфейса
+название выделено.
+
+bash:#ip a
+
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN qlen 1
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+2:  \033[1mens160\033[0m: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP qlen 1000
+    link/ether 00:00:56:b7:08:c0 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.0.3/24 brd 192.168.0.3. scope global ens160
+       valid_lft forever preferred_lft forever
+3: v13: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN qlen 1000
+    link/ether 00:00:00:be:53:fe brd ff:ff:ff:ff:ff:ff
+    inet 192.168.111.1/24 brd 192.168.111.255 scope global v13
+       valid_lft forever preferred_lft forever
+4: v13-nic: <BROADCAST,MULTICAST> mtu 1500 qdisc pfifo_fast master v130 state DOWN qlen 1000
+    link/ether 52:54:00:be:53:fe brd ff:ff:ff:ff:ff:ff
+
+Для выхода введите любое значение.
+"
+
+fi
+}
+
+
+function docipvp {
+if [ $langlocale -eq 0 ]
+then
+echo "
+You must enter any free IP address on the network. Later, this IP address will be used as the primary address for communication between the DBMS and applications.
+
+To exit, press any key.
+"
+else
+echo "
+В данном пункте необходимо ввести любой свободный IP-Адрес в сети. В дальнейшем данный IP-Адрес будет использоваться в качестве основного адреса для взаимодействия СУБД с приложениями.
+
+Для выхода введите любое значение.
+"
+fi
+}
+
+function docback_doc {
+if [ $langlocale -eq 0 ]
+then
+echo "
+To increase system fault tolerance, you must mount a separate drive in the directory /pgdata/backups
+
+To exit, press any key
+"
+else
+echo "
+В целях повышения отказоустойчивости системы, требуется выполнить монтирование отдельного диска в директорию /pgdata/backups
+
+Для выхода введите любое значение.
+"
+fi
+}
+
+function docshb {
+if [ $langlocale -eq 0 ]
+then
+echo "
+shared_buffers (integer)
+Sets the amount of memory the database server uses for shared memory buffers. The default is typically 128 megabytes (128MB), but might be less if your kernel settings will not support it (as determined during initdb). This setting must be at least 128 kilobytes. (Non-default values of BLCKSZ change the minimum.) However, settings significantly higher than the minimum are usually needed for good performance. This parameter can only be set at server start.
+
+If you have a dedicated database server with 1GB or more of RAM, a reasonable starting value for shared_buffers is 25% of the memory in your system. There are some workloads where even large settings for shared_buffers are effective, but because PostgreSQL also relies on the operating system cache, it is unlikely that an allocation of more than 40% of RAM to shared_buffers will work better than a smaller amount. Larger settings for shared_buffers usually require a corresponding increase in checkpoint_segments, in order to spread out the process of writing large quantities of new or changed data over a longer period of time.
+
+On systems with less than 1GB of RAM, a smaller percentage of RAM is appropriate, so as to leave adequate space for the operating system. Also, on Windows, large values for shared_buffers aren't as effective. You may find better results keeping the setting relatively low and using the operating system cache more instead. The useful range for shared_buffers on Windows systems is generally from 64MB to 512MB.
+
+Information taken from www.postgresql.org
+To exit, press any key
+"
+else
+echo "
+shared_buffers (integer)
+Задаёт объём памяти, который будет использовать сервер баз данных для буферов в разделяемой памяти. По умолчанию это обычно 128 мегабайт (128MB), но может быть и меньше, если конфигурация вашего ядра накладывает дополнительные ограничения (это определяется в процессе initdb). Это значение не должно быть меньше 128 килобайт. (Этот минимум зависит от величины BLCKSZ.) Однако для хорошей производительности обычно требуются гораздо большие значения. Задать этот параметр можно только при запуске сервера.
+
+Если вы используете выделенный сервер с объёмом ОЗУ 1 ГБ и более, разумным начальным значением shared_buffers будет 25% от объёма памяти. Существуют варианты нагрузки, при которых эффективны будут и ещё большие значения shared_buffers, но так как Postgres Pro использует и кеш операционной системы, выделять для shared_buffers более 40% ОЗУ вряд ли будет полезно. При увеличении shared_buffers обычно требуется соответственно увеличить max_wal_size, чтобы растянуть процесс записи большого объёма новых или изменённых данных на более продолжительное время.
+
+В серверах с объёмом ОЗУ меньше 1ГБ следует использовать меньший процент ОЗУ, чтобы оставить достаточно памяти для операционной системы. Кроме того, большие значения shared_buffers не так эффективны в Windows. Возможно, вы получите лучшие результаты, если оставите это значение относительно небольшим и будете больше полагаться на кеш операционной системы. Оптимальные значения shared_buffers для Windows обычно лежат в интервале от 64 до 512 мегабайт.
+
+Информация взята с сайта www.postgrespro.ru
+Для выхода введите любое значение.
+"
+fi
+}
+
+function doccct {
+if [ $langlocale -eq 0 ]
+then
+echo "
+checkpoint_completion_target (floating point)
+Specifies the target of checkpoint completion, as a fraction of total time between checkpoints. The default is 0.5. This parameter can only be set in the postgresql.conf file or on the server command line.
+
+
+Information taken from www.postgresql.org
+To exit, press any key
+"
+else
+echo "
+checkpoint_completion_target (floating point)
+Задаёт целевое время для завершения процедуры контрольной точки, как коэффициент для общего времени между контрольными точками. По умолчанию это значение равно 0.5. Задать этот параметр можно только в postgresql.conf или в командной строке при запуске сервера.
+
+Информация взята с сайта www.postgrespro.ru
+Для выхода введите любое значение.
+"
+fi
+}
+
+function docdst {
+if [ $langlocale -eq 0 ]
+then
+echo "
+default_statistics_target (integer)
+Sets the default statistics target for table columns without a column-specific target set via ALTER TABLE SET STATISTICS. Larger values increase the time needed to do ANALYZE, but might improve the quality of the planner's estimates. The default is 100. For more information on the use of statistics by the PostgreSQL query planner, refer to Section 14.2.
+
+Information taken from www.postgresql.org
+To exit, press any key
+"
+else
+echo "
+default_statistics_target (integer)
+Устанавливает целевое ограничение статистики по умолчанию, распространяющееся на столбцы, для которых командой ALTER TABLE SET STATISTICS не заданы отдельные ограничения. Чем больше установленное значение, тем больше времени требуется для выполнения ANALYZE, но тем выше может быть качество оценок планировщика. Значение этого параметра по умолчанию — 100. 
+
+Информация взята с сайта www.postgrespro.ru
+Для выхода введите любое значение.
+"
+fi
+}
+
+function docecs {
+if [ $langlocale -eq 0 ]
+then
+echo "
+effective_cache_size (integer)
+Sets the planner's assumption about the effective size of the disk cache that is available to a single query. This is factored into estimates of the cost of using an index; a higher value makes it more likely index scans will be used, a lower value makes it more likely sequential scans will be used. When setting this parameter you should consider both PostgreSQL's shared buffers and the portion of the kernel's disk cache that will be used for PostgreSQL data files, though some data might exist in both places. Also, take into account the expected number of concurrent queries on different tables, since they will have to share the available space. This parameter has no effect on the size of shared memory allocated by PostgreSQL, nor does it reserve kernel disk cache; it is used only for estimation purposes. The system also does not assume data remains in the disk cache between queries. The default is 4 gigabytes (4GB).
+
+Information taken from www.postgresql.org
+To exit, press any key
+"
+else
+echo "
+effective_cache_size (integer)
+Определяет представление планировщика об эффективном размере дискового кеша, доступном для одного запроса. Это представление влияет на оценку стоимости использования индекса; чем выше это значение, тем больше вероятность, что будет применяться сканирование по индексу, чем ниже, тем более вероятно, что будет выбрано последовательное сканирование. При установке этого параметра следует учитывать и объём разделяемых буферов Postgres Pro, и процент дискового кеша ядра, который будут занимать файлы данных Postgres Pro, хотя некоторые данные могут оказаться и там, и там. Кроме того, следует принять во внимание ожидаемое число параллельных запросов к разным таблицам, так как общий размер будет разделяться между ними. Этот параметр не влияет на размер разделяемой памяти, выделяемой Postgres Pro, и не задаёт размер резервируемого в ядре дискового кеша; он используется только в качестве ориентировочной оценки. При этом система не учитывает, что данные могут оставаться в дисковом кеше от запроса к запросу. Значение этого параметра по умолчанию — 4 гигабайта (4GB)
+
+Информация взята с сайта www.postgrespro.ru
+Для выхода введите любое значение.
+"
+fi
+}
+
+function docmwm {
+if [ $langlocale -eq 0 ]
+then
+echo "
+maintenance_work_mem (integer)
+Specifies the maximum amount of memory to be used by maintenance operations, such as VACUUM, CREATE INDEX, and ALTER TABLE ADD FOREIGN KEY. It defaults to 64 megabytes (64MB). Since only one of these operations can be executed at a time by a database session, and an installation normally doesn't have many of them running concurrently, it's safe to set this value significantly larger than work_mem. Larger settings might improve performance for vacuuming and for restoring database dumps.
+
+Note that when autovacuum runs, up to autovacuum_max_workers times this memory may be allocated, so be careful not to set the default value too high. It may be useful to control for this by separately setting autovacuum_work_mem.
+
+Information taken from www.postgresql.org
+To exit, press any key
+"
+else
+echo "
+maintenance_work_mem (integer)
+Задаёт максимальный объём памяти для операций обслуживания БД, в частности VACUUM, CREATE INDEX и ALTER TABLE ADD FOREIGN KEY. По умолчанию его значение — 64 мегабайта (64MB). Так как в один момент времени в сеансе может выполняться только одна такая операция, и обычно они не запускаются параллельно, это значение вполне может быть гораздо больше work_mem. Увеличение этого значения может привести к ускорению операций очистки и восстановления БД из копии.
+
+Учтите, что когда выполняется автоочистка, этот объём может быть выделен autovacuum_max_workers раз, поэтому не стоит устанавливать значение по умолчанию слишком большим. Возможно, будет лучше управлять объёмом памяти для автоочистки отдельно, изменяя autovacuum_work_mem.
+
+Информация взята с сайта www.postgrespro.ru
+Для выхода введите любое значение.
+"
+fi
+}
+
+function docmwp {
+if [ $langlocale -eq 0 ]
+then
+echo "
+max_worker_processes (integer)
+Sets the maximum number of background processes that the system can support. This parameter can only be set at server start.
+
+When running a standby server, you must set this parameter to the same or higher value than on the master server. Otherwise, queries will not be allowed in the standby server.
+
+Information taken from www.postgresql.org
+To exit, press any key
+"
+else
+echo "
+max_worker_processes (integer)
+Задаёт максимальное число фоновых процессов, которое можно запустить в текущей системе. Этот параметр можно задать только при запуске сервера. Значение по умолчанию — 8.
+
+Для ведомого сервера значение этого параметра должно быть больше или равно значению на ведущем. В противном случае на ведомом сервере не будут разрешены запросы.
+
+При изменении этого значения также может быть полезно изменить max_parallel_workers и max_parallel_workers_per_gather.
+Для выхода введите любое значение.
+"
+fi
+}
+
+
+function docmpw {
+if [ $langlocale -eq 0 ]
+then
+echo "
+max_parallel_workers (integer)
+Sets the maximum number of workers that the system can support for parallel queries. The default value is 8. When increasing or decreasing this value, consider also adjusting max_parallel_workers_per_gather. Also, note that a setting for this value which is higher than max_worker_processes will have no effect, since parallel workers are taken from the pool of worker processes established by that setting.
+
+Information taken from www.postgresql.org
+To exit, press any key
+"
+else
+echo "
+max_parallel_workers (integer)
+Задаёт максимальное число рабочих процессов, которое система сможет поддерживать для параллельных запросов. Значение по умолчанию — 8. При увеличении или уменьшения этого значения также может иметь смысл скорректировать max_parallel_workers_per_gather. Заметьте, что значение данного параметра, превышающее max_worker_processes, не будет действовать, так как параллельные рабочие процессы берутся из пула рабочих процессов, ограничиваемого этим параметром.
+
+Информация взята с сайта www.postgrespro.ru
+Для выхода введите любое значение.
+"
+fi
+}
+
+function docmpwpg {
+if [ $langlocale -eq 0 ]
+then
+echo "
+max_parallel_workers_per_gather (integer)
+Sets the maximum number of workers that can be started by a single Gather or Gather Merge node. Parallel workers are taken from the pool of processes established by max_worker_processes, limited by max_parallel_workers. Note that the requested number of workers may not actually be available at run time. If this occurs, the plan will run with fewer workers than expected, which may be inefficient. The default value is 2. Setting this value to 0 disables parallel query execution.
+
+Note that parallel queries may consume very substantially more resources than non-parallel queries, because each worker process is a completely separate process which has roughly the same impact on the system as an additional user session. This should be taken into account when choosing a value for this setting, as well as when configuring other settings that control resource utilization, such as work_mem. Resource limits such as work_mem are applied individually to each worker, which means the total utilization may be much higher across all processes than it would normally be for any single process. For example, a parallel query using 4 workers may use up to 5 times as much CPU time, memory, I/O bandwidth, and so forth as a query which uses no workers at all.
+
+For more information on parallel query, see Chapter 15.
+
+Information taken from www.postgresql.org
+To exit, press any key
+"
+else
+echo "
+max_parallel_workers_per_gather (integer)
+Задаёт максимальное число рабочих процессов, которые могут запускаться одним узлом Gather или Gather Merge. Параллельные рабочие процессы берутся из пула процессов, контролируемого параметром max_worker_processes, в количестве, ограничиваемом значением max_parallel_workers. Учтите, что запрошенное количество рабочих процессов может быть недоступно во время выполнения. В этом случае план будет выполняться с меньшим числом процессов, что может быть неэффективно. Значение по умолчанию — 2. Значение 0 отключает параллельное выполнение запросов.
+
+Учтите, что параллельные запросы могут потреблять значительно больше ресурсов, чем не параллельные, так как каждый рабочий процесс является отдельным процессом и оказывает на систему примерно такое же влияние, как дополнительный пользовательский сеанс. Это следует учитывать, выбирая значение этого параметра, а также настраивая другие параметры, управляющие использованием ресурсов, например work_mem. Ограничения ресурсов, такие как work_mem, применяются к каждому рабочему процессу отдельно, что означает, что общая нагрузка для всех процессов может оказаться гораздо больше, чем при обычном использовании одного процесса. Например, параллельный запрос, задействующий 4 рабочих процесса, может использовать в 5 раз больше времени процессора, объёма памяти, ввода/вывода и т. д., по сравнению с запросом, не задействующим рабочие процессы вовсе.
+
+Информация взята с сайта www.postgrespro.ru
+Для выхода введите любое значение.
+"
+fi
+}
+
+function docmiws {
+if [ $langlocale -eq 0 ]
+then
+echo "
+min_wal_size (integer)
+As long as WAL disk usage stays below this setting, old WAL files are always recycled for future use at a checkpoint, rather than removed. This can be used to ensure that enough WAL space is reserved to handle spikes in WAL usage, for example when running large batch jobs. The default is 80 MB. This parameter can only be set in the postgresql.conf file or on the server command line.
+
+Information taken from www.postgresql.org
+To exit, press any key
+"
+else
+echo "
+min_wal_size (integer)
+Пока WAL занимает на диске меньше этого объёма, старые файлы WAL в контрольных точках всегда перерабатываются, а не удаляются. Это позволяет зарезервировать достаточно места для WAL, чтобы справиться с резкими скачками использования WAL, например, при выполнении больших пакетных заданий. Значение по умолчанию — 80 МБ. Этот параметр можно установить только в postgresql.conf или в командной строке сервера.
+
+Информация взята с сайта www.postgrespro.ru
+Для выхода введите любое значение.
+"
+fi
+}
+
+function docmaws {
+if [ $langlocale -eq 0 ]
+then
+echo "
+max_wal_size (integer)
+Maximum size to let the WAL grow to between automatic WAL checkpoints. This is a soft limit; WAL size can exceed max_wal_size under special circumstances, like under heavy load, a failing archive_command, or a high wal_keep_segments setting. The default is 1 GB. Increasing this parameter can increase the amount of time needed for crash recovery. This parameter can only be set in the postgresql.conf file or on the server command line.
+
+Information taken from www.postgresql.org
+To exit, press any key
+"
+else
+echo "
+max_wal_size (integer)
+Максимальный размер, до которого может вырастать WAL между автоматическими контрольными точками в WAL. Это мягкий предел; размер WAL может превышать max_wal_size при особых обстоятельствах, например, при высокой нагрузке, сбое в archive_command или при большом значении wal_keep_segments. Значение по умолчанию — 1 ГБ. Увеличение этого параметра может привести к увеличению времени, которое потребуется для восстановления после сбоя. Задать этот параметр можно только в postgresql.conf или в командной строке при запуске сервера.
+
+Информация взята с сайта www.postgrespro.ru
+Для выхода введите любое значение.
+"
+fi
+}
+
+function docrpc {
+if [ $langlocale -eq 0 ]
+then
+echo "
+random_page_cost (floating point)
+Sets the planner's estimate of the cost of a non-sequentially-fetched disk page. The default is 4.0. This value can be overridden for tables and indexes in a particular tablespace by setting the tablespace parameter of the same name (see ALTER TABLESPACE).
+
+Reducing this value relative to seq_page_cost will cause the system to prefer index scans; raising it will make index scans look relatively more expensive. You can raise or lower both values together to change the importance of disk I/O costs relative to CPU costs, which are described by the following parameters.
+
+Random access to mechanical disk storage is normally much more expensive than four times sequential access. However, a lower default is used (4.0) because the majority of random accesses to disk, such as indexed reads, are assumed to be in cache. The default value can be thought of as modeling random access as 40 times slower than sequential, while expecting 90% of random reads to be cached.
+
+If you believe a 90% cache rate is an incorrect assumption for your workload, you can increase random_page_cost to better reflect the true cost of random storage reads. Correspondingly, if your data is likely to be completely in cache, such as when the database is smaller than the total server memory, decreasing random_page_cost can be appropriate. Storage that has a low random read cost relative to sequential, e.g. solid-state drives, might also be better modeled with a lower value for random_page_cost.
+
+Information taken from www.postgresql.org
+To exit, press any key
+"
+else
+echo "
+random_page_cost (floating point)
+Задаёт приблизительную стоимость чтения одной произвольной страницы с диска. Значение по умолчанию равно 4.0. Это значение можно переопределить для таблиц и индексов в определённом табличном пространстве, установив одноимённый параметр табличного пространства (см. ALTER TABLESPACE).
+
+При уменьшении этого значения по отношению к seq_page_cost система начинает предпочитать сканирование по индексу; при увеличении такое сканирование становится более дорогостоящим. Оба эти значения также можно увеличить или уменьшить одновременно, чтобы изменить стоимость операций ввода/вывода по отношению к стоимости процессорных операций, которая определяется следующими параметрами.
+
+Произвольный доступ к механическому дисковому хранилищу обычно гораздо дороже последовательного доступа, более чем в четыре раза. Однако по умолчанию выбран небольшой коэффициент (4.0), в предположении, что большой объём данных при произвольном доступе, например, при чтении индекса, окажется в кеше. Таким образом, можно считать, что значение по умолчанию моделирует ситуацию, когда произвольный доступ в 40 раз медленнее последовательного, но 90% операций произвольного чтения удовлетворяются из кеша.
+
+Если вы считаете, что для вашей рабочей нагрузки процент попаданий не достигает 90%, вы можете увеличить параметр random_page_cost, чтобы он больше соответствовал реальной стоимости произвольного чтения. И напротив, если ваши данные могут полностью поместиться в кеше, например, когда размер базы меньше общего объёма памяти сервера, может иметь смысл уменьшить random_page_cost. С хранилищем, у которого стоимость произвольного чтения не намного выше последовательного, как например, у твердотельных накопителей, так же лучше выбрать меньшее значение random_page_cost.
+
+Информация взята с сайта www.postgrespro.ru
+Для выхода введите любое значение.
+"
+fi
+}
+
+function doceic {
+if [ $langlocale -eq 0 ]
+then
+echo "
+effective_io_concurrency (integer)
+Sets the number of concurrent disk I/O operations that PostgreSQL expects can be executed simultaneously. Raising this value will increase the number of I/O operations that any individual PostgreSQL session attempts to initiate in parallel. The allowed range is 1 to 1000, or zero to disable issuance of asynchronous I/O requests. Currently, this setting only affects bitmap heap scans.
+
+A good starting point for this setting is the number of separate drives comprising a RAID 0 stripe or RAID 1 mirror being used for the database. (For RAID 5 the parity drive should not be counted.) However, if the database is often busy with multiple queries issued in concurrent sessions, lower values may be sufficient to keep the disk array busy. A value higher than needed to keep the disks busy will only result in extra CPU overhead.
+
+For more exotic systems, such as memory-based storage or a RAID array that is limited by bus bandwidth, the correct value might be the number of I/O paths available. Some experimentation may be needed to find the best value.
+
+Asynchronous I/O depends on an effective posix_fadvise function, which some operating systems lack. If the function is not present then setting this parameter to anything but zero will result in an error. On some operating systems (e.g., Solaris), the function is present but does not actually do anything.
+
+The default is 1 on supported systems, otherwise 0.
+
+Information taken from www.postgresql.org
+To exit, press any key
+"
+else
+echo "
+effective_io_concurrency (integer)
+Задаёт допустимое число параллельных операций ввода/вывода, которое говорит PostgreSQL о том, сколько операций ввода/вывода могут быть выполнены одновременно. Чем больше это число, тем больше операций ввода/вывода будет пытаться выполнить параллельно PostgreSQL в отдельном сеансе. Допустимые значения лежат в интервале от 1 до 1000, а нулевое значение отключает асинхронные запросы ввода/вывода. В настоящее время этот параметр влияет только на сканирование по битовой карте.
+
+Для магнитных носителей хорошим начальным значением этого параметра будет число отдельных дисков, составляющих массив RAID 0 или RAID 1, в котором размещена база данных. (Для RAID 5 следует исключить один диск (как диск с чётностью).) Однако, если база данных часто обрабатывает множество запросов в различных сеансах, и при небольших значениях дисковый массив может быть полностью загружен. Если продолжать увеличивать это значение при полной загрузке дисков, это приведёт только к увеличению нагрузки на процессор. Диски SSD и другие виды хранилища в памяти часто могут обрабатывать множество параллельных запросов, так что оптимальным числом может быть несколько сотен.
+
+Асинхронный ввод/вывод зависит от эффективности функции posix_fadvise, которая отсутствует в некоторых операционных системах. В случае её отсутствия попытка задать для этого параметра любое ненулевое значение приведёт к ошибке. В некоторых системах (например, в Solaris), эта функция присутствует, но на самом деле ничего не делает.
+
+Значение по умолчанию равно 1 в системах, где это поддерживается, и 0 в остальных. Это значение можно переопределить для таблиц в определённом табличном пространстве, установив одноимённый параметр табличного пространства (см. ALTER TABLESPACE).
+
+Информация взята с сайта www.postgrespro.ru
+Для выхода введите любое значение.
+"
+fi
+}
+
+function docwb {
+if [ $langlocale -eq 0 ]
+then
+echo "
+wal_buffers (integer)
+The amount of shared memory used for WAL data that has not yet been written to disk. The default setting of -1 selects a size equal to 1/32nd (about 3%) of shared_buffers, but not less than 64kB nor more than the size of one WAL segment, typically 16MB. This value can be set manually if the automatic choice is too large or too small, but any positive value less than 32kB will be treated as 32kB. This parameter can only be set at server start.
+
+The contents of the WAL buffers are written out to disk at every transaction commit, so extremely large values are unlikely to provide a significant benefit. However, setting this value to at least a few megabytes can improve write performance on a busy server where many clients are committing at once. The auto-tuning selected by the default setting of -1 should give reasonable results in most cases.
+
+Information taken from www.postgresql.org
+To exit, press any key
+"
+else
+echo "
+wal_buffers (integer)
+Объём разделяемой памяти, который будет использоваться для буферизации данных WAL, ещё не записанных на диск. Значение по умолчанию, равное -1, задаёт размер, равный 1/32 (около 3%) от shared_buffers, но не меньше, чем 64 КБ и не больше, чем размер одного сегмента WAL (обычно 16 МБ). Это значение можно задать вручную, если выбираемое автоматически слишком мало или велико, но при этом любое положительное число меньше 32 КБ будет восприниматься как 32 КБ. Этот параметр можно задать только при запуске сервера.
+
+Содержимое буферов WAL записывается на диск при фиксировании каждой транзакции, так что очень большие значения вряд ли принесут значительную пользу. Однако значение как минимум в несколько мегабайт может увеличить быстродействие при записи на нагруженном сервере, когда сразу множество клиентов фиксируют транзакции. Автонастройка, действующая при значении по умолчанию (-1), в большинстве случаев выбирает разумные значения.
+
+Информация взята с сайта www.postgrespro.ru
+Для выхода введите любое значение.
+"
+fi
+}
+
+function docnrf {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Enter any name
+To exit, press any key
+"
+else
+echo "
+Имя может быть любое, лучше всего использовать одни и те же имена, что бы легче было администрировать, например org-vcenter-fence
+
+Для выхода введите любое значение.
+"
+fi
+}
+
+function docdnsvm {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Fully qualified domain name VCENTER
+To exit, press any key
+"
+else
+echo "
+Полное доменное имя VCENTER
+
+Для выхода введите любое значение.
+"
+fi
+}
+
+function docuservm {
+if [ $langlocale -eq 0 ]
+then
+echo "
+The login of a user who has access to VCENTER has rights to manage PostgreSQL servers. If the user is a domain user, you must specify the '"'domain\\\\\\\\login'"'
+
+To exit, press any key
+"
+else
+echo "
+Login пользователя, который имеет доступ к VCENTER, имеет привилегии для управления серверами PostgreSQL, если пользователь доменный, то необходимо указать так domain\\\\\\\\login
+
+Для выхода введите любое значение."
+fi
+}
+
+function docpassvm {
+if [ $langlocale -eq 0 ]
+then
+echo "
+Password from VM user
+
+To exit, press any key
+"
+else
+echo "
+Password от данного пользователя
+
+Для выхода введите любое значение.
+"
+fi
+}
+
+function docvmname {
+if [ $langlocale -eq 0 ]
+then
+echo "
+The virtual machine name specified in VCENTER, if another server is mistakenly specified, it will restart the specified server
+
+To exit, press any key
+"
+else
+echo "
+Имя виртуальной машины указанный в VCENTER, в случае если ошибочно указан другой сервер, это приведет, к тому, что указанный сервер будет перезагружен
+
+Для выхода введите любое значение.
+"
+fi
+}
+
+function docipms {
+if [ $langlocale -eq 0 ]
+then
+
+echo -e "
+Enter the IP address of the server
+
+bash:#ip a
+
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN qlen 1
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+2:  ens160: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP qlen 1000
+    link/ether 00:00:56:b7:08:c0 brd ff:ff:ff:ff:ff:ff
+    inet \033[1m192.168.0.2\033[0m/24 brd 192.168.0.2. scope global ens160
+       valid_lft forever preferred_lft forever
+3: v13: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN qlen 1000
+    link/ether 00:00:00:be:53:fe brd ff:ff:ff:ff:ff:ff
+    inet 192.168.111.1/24 brd 192.168.111.255 scope global v13
+       valid_lft forever preferred_lft forever
+4: v13-nic: <BROADCAST,MULTICAST> mtu 1500 qdisc pfifo_fast master v130 state DOWN qlen 1000
+    link/ether 52:54:00:be:53:fe brd ff:ff:ff:ff:ff:ff
+
+To exit, press any key"
+
+else
+
+echo -e "
+В данном пункте необходимо ввести IP-Адрес сервера
+IP-Адрес выделен.
+
+bash:#ip a
+
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN qlen 1
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+2:  ens160: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP qlen 1000
+    link/ether 00:00:56:b7:08:c0 brd ff:ff:ff:ff:ff:ff
+    inet \033[1m192.168.0.2\033[0m/24 brd 192.168.0.2. scope global ens160
+       valid_lft forever preferred_lft forever
+3: v13: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN qlen 1000
+    link/ether 00:00:00:be:53:fe brd ff:ff:ff:ff:ff:ff
+    inet 192.168.111.1/24 brd 192.168.111.255 scope global v13
+       valid_lft forever preferred_lft forever
+4: v13-nic: <BROADCAST,MULTICAST> mtu 1500 qdisc pfifo_fast master v130 state DOWN qlen 1000
+    link/ether 52:54:00:be:53:fe brd ff:ff:ff:ff:ff:ff
+
+Для выхода введите любое значение."
+
+
+fi
+}
+
+
+function doc {
+if [ $langlocale -eq 0 ]
+then
+echo "
+
+"
+else
+echo "
+
+"
+fi
+}

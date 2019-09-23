@@ -1,0 +1,370 @@
+function mos {
+
+clear
+. $HOME/dep/config.cfg
+cp -rp ${HOME}/conf/sco.one ${HOME}/dep/sco.cfg
+
+infsetmoswkm
+read -e -p `infvalue` -i "16384" wkm
+while [ "$wkm" = "?" ]
+do				
+				clear
+                                docwkm
+				read -s -n 1
+				clear
+				infsetmoswkm
+                                read -e -p `infvalue` -i "16384" wkm
+done
+
+b=`cat $HOME/dep/setp.cfg | grep -c work_mem`
+
+if [ $b -eq 0 ]
+        then 
+                echo "work_mem = '${wkm}kB'" >> $HOME/dep/setp.cfg
+        else
+                sed -i 's!.*work_mem.*!work_mem = '"'${wkm}kB'"'!g' dep/setp.cfg
+fi
+
+clear
+
+infsetmosshb
+read -e -p `infvalue` -i "128" shb
+while [ "$shb" = "?" ]
+do
+                                clear
+				docshb
+				read -s -n 1
+				clear
+				infsetmosshb
+                                read -e -p `infvalue` -i "128" shb
+done
+
+b=`cat $HOME/dep/setp.cfg | grep -c shared_buffer`
+
+if [ $b -eq 0 ]
+        then 
+                echo "shared_buffers = '${shb}MB'" >> $HOME/dep/setp.cfg
+        else
+                sed -i 's!.*shared_buffers.*!shared_buffers = '"'${shb}MB'"'!g' dep/setp.cfg
+fi
+
+clear
+
+infsetmoscct
+read -e -p `infvalue` -i "0.9" cct
+while [ "$cct" = "?" ]
+do
+				clear
+                                doccct
+				read -s -n 1
+				clear
+				infsetmoscct
+                                read -e -p `infvalue` -i "0.9" cct
+done
+
+b=`cat $HOME/dep/setp.cfg | grep -c checkpoint_completion_target`
+if [ $b -eq 0 ]
+        then
+                echo "checkpoint_completion_target = '${cct}'" >> $HOME/dep/setp.cfg
+        else
+                sed -i 's!.*checkpoint_completion_target.*!checkpoint_completion_target = '"'${cct}'"'!g' dep/setp.cfg
+fi
+
+clear
+
+infsetmosdst
+read -e -p `infvalue` -i "100" dst
+while [ "$dst" = "?" ]
+do
+				clear
+                                docdst
+				read -s -n 1
+				clear
+				infsetmosdst
+                                read -e -p `infvalue` -i "100" dst
+done
+
+b=`cat $HOME/dep/setp.cfg | grep -c default_statistics_target`
+
+if [ $b -eq 0 ]
+        then 
+                echo "default_statistics_target = '${dst}'" >> $HOME/dep/setp.cfg
+        else
+                sed -i 's!.*default_statistics_target.*!default_statistics_target = '"'${dst}'"'!g' dep/setp.cfg
+fi
+
+clear
+
+infsetmosecs
+read -e -p `infvalue` -i "128" ecs
+while [ "$ecs" = "?" ]
+do
+				clear
+                                docecs
+				read -s -n 1
+				clear
+				infsetmosecs
+                                read -e -p `infvalue` -i "128" ecs
+done
+
+b=`cat $HOME/dep/setp.cfg | grep -c effective_cache_size`
+
+if [ $b -eq 0 ]
+        then
+                echo "effective_cache_size = '${ecs}MB'" >> $HOME/dep/setp.cfg
+        else
+                sed -i 's!.*effective_cache_size.*!effective_cache_size = '"'${ecs}MB'"'!g' dep/setp.cfg
+fi
+
+clear
+
+infsetmosmxc
+read -e -p `infvalue` -i "100" mxc
+while [ "$mxc" = "?" ]
+do
+				clear
+                                docmxc
+				read -s -n 1
+				clear
+				infsetmosmxc
+                                read -e -p `infvalue` -i "100" mxc
+done
+
+b=`cat $HOME/dep/setp.cfg | grep -c max_connections`
+
+if [ $b -eq 0 ]
+        then 
+                echo "max_connections = '$mxc'" >> $HOME/dep/setp.cfg
+        else
+                sed -i 's!.*max_connections.*!max_connections = '"'$mxc'"'!g' dep/setp.cfg
+fi
+
+clear
+
+infsetmosmwm
+read -e -p `infvalue` -i "128" mwm
+while [ "$mwm" = "?" ]
+do
+				clear
+                                docmwm
+				read -s -n 1
+				clear
+				infsetmosmwm
+                                read -e -p `infvalue` -i "128" mwm
+done
+
+b=`cat $HOME/dep/setp.cfg | grep -c maintenance_work_mem`
+
+if [ $b -eq 0 ]
+        then
+                echo "maintenance_work_mem = '${mwm}MB'" >> $HOME/dep/setp.cfg
+                sed -i 's!mwm.*!mwm='${mwm}'!g' dep/arg.cfg
+        else
+                sed -i 's!.*maintenance_work_mem.*!maintenance_work_mem = '"'${mwm}MB'"'!g' dep/setp.cfg
+                sed -i 's!mwm.*!mwm='${mwm}'!g' dep/arg.cfg
+fi
+
+clear
+
+if [ $nn -eq 95 ]
+
+                then
+                        echo""
+                else
+
+infsetmosmwp
+read -e -p `infvalue` -i "1" mwp
+while [ "$mwp" = "?" ]
+do
+				clear
+                                docmwp
+				read -s -n 1
+				clear
+				infsetmosmwp
+                                read -e -p `infvalue` -i "1" mwp
+				
+done
+
+b=`cat $HOME/dep/setp.cfg | grep -c max_worker_processes`
+
+ if [ $b -eq 0 ]
+                then
+                        echo "max_worker_processes = '${mwp}'" >> $HOME/dep/setp.cfg
+                else
+                        sed -i 's!.*max_worker_processes.*!max_worker_processes = '"'${mwp}'"'!g'  $HOME/dep/setp.cfg
+ fi
+fi
+
+clear
+
+if [ $nn -ge 95 ]
+		then
+			echo""
+		else
+infsetmosmpw
+read -e -p `infvalue` -i "1" mpw
+while [ "$mpw" = "?" ]
+do
+				clear
+                                docmpw
+				read -s -n 1
+				clear
+				infsetmosmpw
+                                read -e -p `infvalue` -i "1" mpw
+done
+
+
+
+b=`cat $HOME/dep/setp.cfg | grep -c max_parallel_workers`
+
+ if [ $b -eq 0 ]
+                                then
+                                        echo "max_parallel_workers = '${mpw}'" >> $HOME/dep/setp.cfg
+                                else
+                                        sed -i 's!.*max_parallel_workers =.*!max_parallel_workers = '"'${mpw}'"'!g' $HOME/dep/setp.cfg
+                        fi
+fi
+clear
+
+if [ $nn -eq 95 ]
+	then
+		echo ""
+	else
+infsetmosmpwpg
+read -e -p `infvalue` -i "1" mpwpg
+while [ "$mpwpg" = "?" ]
+do
+				clear
+                                docmpwpg
+				read -s -n 1
+				clear
+				infsetmosmpwpg
+                                read -e -p `infvalue` -i "1" mpwpg
+done
+
+b=`cat $HOME/dep/setp.cfg | grep -c max_parallel_workers_per_gather`
+
+if [ $b -eq 0 ]
+                                then
+                                        echo "max_parallel_workers_per_gather = '${mpwpg}'" >> $HOME/dep/setp.cfg
+                                else
+                                        sed -i 's!.*max_parallel_workers_per_gather.*!max_parallel_workers_per_gather = '"'${mpwpg}'"'!g'  $HOME/dep/setp.cfg
+fi
+fi
+
+clear
+
+infsetmosmiws
+read -e -p `infvalue` -i "2" miws
+while [ "$miws" = "?" ]
+do
+				clear
+                                docmiws
+				read -s -n 1
+				clear
+				infsetmosmiws
+                                read -e -p `infvalue` -i "2" miws
+done
+
+b=`cat $HOME/dep/setp.cfg | grep -c min_wal_size`
+
+if [ $b -eq 0 ]
+        then
+                echo "min_wal_size = '${miws}GB'" >> $HOME/dep/setp.cfg
+        else
+                sed -i 's!.*min_wal_size.*!min_wal_size = '"'${miws}GB'"'!g' dep/setp.cfg
+fi
+
+clear
+
+infsetmosmaws
+read -e -p `infvalue` -i "4" maws
+while [ "$maws" = "?" ]
+do
+				clear
+                                docmaws
+				read -s -n 1
+				clear
+				infsetmosmaws
+                                read -e -p `infvalue` -i "4" maws
+done
+
+b=`cat $HOME/dep/setp.cfg | grep -c max_wal_size`
+
+if [ $b -eq 0 ]
+        then
+                echo "max_wal_size = '${maws}GB'" >> $HOME/dep/setp.cfg
+        else
+                sed -i 's!.*max_wal_size.*!max_wal_size = '"'${maws}GB'"'!g' dep/setp.cfg
+fi
+
+clear
+
+infsetmosrpc
+read -e -p `infvalue` -i "4" rpc
+while [ "$rpc" = "?" ]
+do
+				clear
+                                docrpc
+				read -s -n 1
+				clear
+				infsetmosrpc
+                                read -e -p `infvalue` -i "4" rpc
+done
+
+b=`cat $HOME/dep/setp.cfg | grep -c random_page_cost`
+
+if [ $b -eq 0 ]
+        then 
+                echo "random_page_cost = '$rpc'" >> $HOME/dep/setp.cfg
+else
+                sed -i 's!.*default_statistics_target.*!default_statistics_target = '"'${rpc}'"'!g' dep/setp.cfg
+fi
+
+clear
+
+infsetmoseic
+read -e -p `infvalue` -i "2" eic
+while [ "$eic" = "?" ]
+do
+				clear
+                                doceic
+				read -s -n 1
+				clear
+				infsetmoseic
+                                read -e -p `infvalue` -i "2" eic
+done
+
+b=`cat $HOME/dep/setp.cfg | grep -c effective_io_concurrency`
+
+if [ $b -eq 0 ]
+        then 
+                echo "effective_io_concurrency = '${eic}'" >> $HOME/dep/setp.cfg
+        else
+                sed -i 's!.*effective_io_concurrency.*!effective_io_concurrency = '"'${eic}'"'!g' dep/setp.cfg
+fi
+
+clear
+
+infsetmoswb
+read -e -p `infvalue` -i "16" wb
+while [ "$wb" = "?" ]
+do
+				clear
+                                docwb
+				read -s -n 1
+				clear
+				infsetmoswb
+                                read -e -p `infvalue` -i "16" wb
+done
+
+b=`cat $HOME/dep/setp.cfg | grep -c wal_buffers`
+
+ if [ $b -eq 0 ]
+                        then
+                                echo "wal_buffers = '${wb}MB'" >> $HOME/dep/setp.cfg
+                        else
+                                sed -i 's!.*wal_buffers.*!wal_buffers = '"'${wb}MB'"'!g' dep/setp.cfg
+                fi
+
+}

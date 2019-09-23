@@ -1,0 +1,14 @@
+function pcs_fence {
+yum install fence-agents-vmware-soap -y
+ssh root@$pg2 -t "yum install fence-agents-vmware-soap -y"
+
+pcs property set stonith-enabled="true"
+pcs stonith create $nrf fence_vmware_soap \
+ipaddr=$dnsvm ipport=443 ssl_insecure=1 inet4_only=1 \
+login="$uservm" passwd="$passvm" \
+pcmk_reboot_action=reboot \
+pcmk_host_map="$h1:$vmname1; $h2:$vmname2" \
+pcmk_host_check=static-list \
+pcmk_host_list="$vmname1,$vmname2" \
+power_wait=3 op monitor interval=60s timeout="180s" on-fail="ignore" --force
+}

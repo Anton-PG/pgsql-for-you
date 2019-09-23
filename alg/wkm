@@ -1,0 +1,25 @@
+function wkm {
+clear
+infsetmoswkm
+read -e -p `infvalue` -i "16384" wkm
+while [ "$wkm" = "?" ]
+do
+				clear
+                                docwkm
+				read -s -n 1
+                                clear
+				infsetmoswkm
+                                read -e -p `infvalue` -i "16384" wkm
+done
+
+b=`cat $HOME/dep/setp.cfg | grep -c work_mem`
+
+if [ $b -eq 0 ]
+	then 
+		echo "work_mem = '${wkm}kB'" >> $HOME/dep/setp.cfg
+		sed -i 's!wkm.*!wkm='${wkm}'!g' dep/arg.cfg
+	else
+		sed -i 's!.*work_mem.*!work_mem = '"'${wkm}kB'"'!g' dep/setp.cfg
+		sed -i 's!wkm.*!wkm='${wkm}'!g' dep/arg.cfg
+fi
+}

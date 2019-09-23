@@ -1,0 +1,756 @@
+function log1 {
+if [ $langlocale -eq 0 ]
+	then
+		echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] Repository connected successfully
+"
+	else
+		echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] Репозиторий успешно сконфигурирован
+"
+fi
+}
+
+function err1 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [ERROR] Repository configuration error
+A detailed description of the error is in the log file $HOME/log/error.log.
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [ERROR] Репозиторий сконфигурирован с ошибкой
+Подробное описание ошибки находится в лог файле $HOME/log/error.log
+"
+fi
+}
+
+function log2 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] Files bash_profile and postgresql.service changed successfully
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] Файлы bash_profile и unit postgresql.service успешно исправлены
+"
+fi
+}
+
+function err2 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+
+`date '+%d.%m.%y_%H:%M'` [ERROR] Files bash_profile and postgresql.service changed error
+A detailed description of the error is in the log file $HOME/log/error.log.
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [ERROR] Файлы bash_profile и unit postgresql.service не удалось исправить
+Подробное описание ошибки находится в лог файле $HOME/log/error.log
+"
+fi
+}
+
+function log3 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] PostgreSQL $n successfully installed on the server $pg1
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] PostgreSQL $n на севере $pg1 успешно установлен
+"
+fi
+}
+
+function err3 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [ERROR] Failed to install PostgreSQL $n on server $pg1
+A detailed description of the error is in the log file $HOME/log/error.log.
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [ERROR] Не удалось установить PostgreSQL $n на сервер $pg1
+Подробное описание ошибки находится в лог файле $HOME/log/error.log
+"
+fi
+}
+
+function log4 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] PostgreSQL $n cluster launched successfully and available at IP-Address $vp
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] Кластер PostgreSQL $n успешно запущен и доступен по IP-Адресу $vp
+"
+fi
+}
+
+function err4 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [ERROR] PostgreSQL $n cluster failed to start
+A detailed description of the error is in the log file $HOME/log/error.log.
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [ERROR] Кластер PostgreSQL $n запустить не удалось
+Подробное описание ошибки находится в лог файле $HOME/log/error.log
+"
+fi
+}
+
+function log5 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] The password for postgres has been successfully changed.
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] Пароль пользователю postgres успешно изменен.
+"
+fi
+}
+
+function err5 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [ERROR] Postgres user password failed
+A detailed description of the error is in the log file $HOME/log/error.log.
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [ERROR] Пароль пользователю postgres изменить не удалось
+Подробное описание ошибки находится в лог файле $HOME/log/error.log
+"
+fi
+}
+
+function log6 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] PCS cluster successfully created and configured
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] Кластер PCS успешно создан и сконфигурирован
+"
+fi
+}
+
+function err6 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [ERROR] PCS cluster cannot be configured
+A detailed description of the error is in the log file $HOME/log/error.log.
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [ERROR] Кластер PCS не удалось настроить
+Подробное описание ошибки находится в лог файле $HOME/log/error.log
+"
+fi
+}
+
+function log7 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] DBMS initialization completed successfully
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] Инициализация СУБД выполнена успешно
+"
+fi
+}
+
+function err7 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [ERROR] Failed to initialize DBMS
+A detailed description of the error is in the log file $HOME/log/error.log.
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [ERROR] Не удалось выполнить инициализацию СУБД
+Подробное описание ошибки находится в лог файле $HOME/log/error.log
+"
+fi
+}
+
+function log8 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] Configurations configured in STAGE: 1.2 successfully applied
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] Конфигурации настроенные в ЭТАПЕ:1,2 успешно применены
+"
+fi
+}
+
+function err8 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [ERROR] Failed to apply the configuration specified in STAGE: 1,2
+A detailed description of the error is in the log file $HOME/log/error.log.
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [ERROR] Не удалось применить конфигурации указанные в ЭТАПЕ:1,2
+Подробное описание ошибки находится в лог файле $HOME/log/error.log
+"
+fi
+}
+
+function log9 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] DBMS preliminary launch in single mode completed successfully
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] Предварительный запуск СУБД в одиночном режиме выполнен успешно
+"
+fi
+}
+
+function err9 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [ERROR] Failed to start DBMS in single mode.
+A detailed description of the error is in the log file $HOME/log/error.log.
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [ERROR] Не удалось выполнить запуск СУБД в одиночном режиме.
+Подробное описание ошибки находится в лог файле $HOME/log/error.log
+"
+fi
+}
+
+function log10 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] DBMS Stop in Single Mode Successfully
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] Остановка СУБД в одиночном режиме выполнена успешно
+"
+fi
+}
+
+function err10 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [ERROR] Failed to stop DBMS in single mode
+A detailed description of the error is in the log file $HOME/log/error.log.
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [ERROR] Не удалось остановить СУБД в одиночном режиме
+Подробное описание ошибки находится в лог файле $HOME/log/error.log
+"
+fi
+}
+
+function log11 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] Successfully copying pg_basebackup utility to $pg2
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] Копирование утилитой pg_basebackup выполнено успешно на узел $pg2
+"
+fi
+}
+
+function err11 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [ERROR] Failed to copy DBMS using pg_basebackup utility to node $pg2
+A detailed description of the error is in the log file $HOME/log/error.log.
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [ERROR] Не удалось копировать СУБД утилитой pg_basebackup на узел $pg2
+Подробное описание ошибки находится в лог файле $HOME/log/error.log
+"
+fi
+}
+
+function log12 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] User "replica" successfully created in PostgreSQL $n DBMS
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] Пользователь "replica" успешно создан в СУБД PostgreSQL $n
+"
+fi
+}
+
+function err12 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [ERROR] Failed to create user "replica" 
+A detailed description of the error is in the log file $HOME/log/error.log.
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [ERROR] Не удалось создать пользователя "replica"
+Подробное описание ошибки находится в лог файле $HOME/log/error.log
+"
+fi
+}
+
+function log13 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] Installation cluster software "pcs+corosync+pacemaker" completed successfully
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] Установка кластерного по pcs+pacemaker+corosync выполнена успешно
+"
+fi
+}
+
+function err13 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [ERROR] Installation of cluster software “pcs + korosink + pacemaker” completed with an error
+A detailed description of the error is in the log file $HOME/log/error.log.
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [ERROR] Не удалось выполнить установку кластерного ПО pcs+pacemaker+corosync
+Подробное описание ошибки находится в лог файле $HOME/log/error.log
+"
+fi
+}
+
+
+function log14 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] Cluster software launched successfully 
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] Запуск кластерного ПО выполнен успешно
+"
+fi
+}
+
+function err14 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [ERROR] Could not start cluster software
+A detailed description of the error is in the log file $HOME/log/error.log.
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [ERROR] Не удалось запустить кластерное ПО
+Подробное описание ошибки находится в лог файле $HOME/log/error.log
+"
+fi
+}
+
+
+function log15 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] DBMS home directory found successfully
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] Домашний каталог для СУБД найден
+"
+fi
+}
+
+function err15 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [ERROR] DBMS /pgdata home directory failed to create
+A detailed description of the error is in the log file $HOME/log/error.log.
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [ERROR] Домашний катало СУБД /pgdata не удалось создать
+Подробное описание ошибки находится в лог файле $HOME/log/error.log
+"
+fi
+}
+
+function log16 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] Change the owner of the /pgdata directory on the server $ pg2 successfully
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] Каталогу /pgdata успешно назначен владелец postgres на сервере $pg2
+"
+fi
+}
+
+function err16 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [ERROR] Failed to change ownership of the /pgdata directory on server $pg2
+A detailed description of the error is in the log file $HOME/log/error.log.
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [ERROR] Не удалось сменить владельца каталога /pgdata на сервере $pg2
+Подробное описание ошибки находится в лог файле $HOME/log/error.log
+"
+fi
+}
+
+
+function log17 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] PostgreSQL $n successfully installed on the server $pg2
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] PostgreSQL $n на севере $pg2 успешно установлен
+"
+fi
+}
+
+function err17 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [ERROR] Failed to install PostgreSQL $n on server $pg2
+A detailed description of the error is in the log file $HOME/log/error.log.
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [ERROR] Не удалось установить PostgreSQL $n на сервер $pg2
+Подробное описание ошибки находится в лог файле $HOME/log/error.log
+"
+fi
+}
+
+
+function log18 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] systemctl daemon-reload completed successfully
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] systemctl daemon-reload выполнен успешно
+"
+fi
+}
+
+function err18 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [ERROR] systemctl daemon-reload executed with an error
+A detailed description of the error is in the log file $HOME/log/error.log.
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [ERROR] systemctl daemon-reload выполнен с ошибкой
+Подробное описание ошибки находится в лог файле $HOME/log/error.log
+"
+fi
+}
+
+function log19 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] Owner on /pgdata reassigned
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] Владелец на /pgdata переназначен
+"
+fi
+}
+
+function err19 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [ERROR] Owner /pgdata failed to reassign
+A detailed description of the error is in the log file $HOME/log/error.log.
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [ERROR] Владельца /pgdata не удалось переназначить
+Подробное описание ошибки находится в лог файле $HOME/log/error.log
+"
+fi
+}
+
+function log20 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] Disk space has been successfully reserved
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] Дисковое пространство успешно зарезервировано
+"
+fi
+}
+
+function err20 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [ERROR] Failed to reserve disk space
+A detailed description of the error is in the log file $HOME/log/error.log.
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [ERROR] Не удалось зарезервировать дисковое пространство
+Подробное описание ошибки находится в лог файле $HOME/log/error.log
+"
+fi
+}
+
+function logshieldok1 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] Setting configuration  (STAGE: 1)
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] Настройка конфигураций (ЭТАП: 1)
+"
+fi
+}
+
+function logshielder1 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [WARN] Configurations were not configured at startup, previous configurations were used (STAGE: 1)
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [WARN] Настройка конфигураций не выполнялась при запуске, использованы предыдущие конфигурации (ЭТАП: 1)
+"
+fi
+}
+
+function logshieldok2 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] PostgreSQL tuning and optimization (STAGE: 2)
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] Настройка и оптимизация PostgreSQL (ЭТАП: 2)
+"
+fi
+}
+
+function logshielder2 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [WARN] PostgreSQL is not optimized at startup, previous configurations were used (STAGE: 2)
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [WARN] Настройка и оптимизация PostgreSQL не выполнялась при запуске, использованы предыдущие конфигурации (ЭТАП: 2)
+"
+fi
+}
+
+function logshieldok3 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] Configuring /etc/hosts on server ${pg1} done
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] Настройка /etc/hosts на сервере ${pg1} выполнена
+"
+fi
+}
+
+function logshielder3 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [ERROR] File /etc/host ons server ${pg1} configured incorrectly
+A detailed description of the error is in the log file $HOME/log/error.log.
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [ERROR] Настройка /etc/hosts на сервере $pg1 не выполнена
+Подробное описание ошибки находится в лог файле $HOME/log/error.log
+"
+fi
+}
+
+function logshieldok4 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] Configuring /etc/hosts on server ${pg2} done
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] Настройка /etc/hosts на сервере ${pg2} выполнена
+"
+fi
+}
+
+function logshielder4 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [ERROR] File /etc/host ons server ${pg2} configured incorrectly
+A detailed description of the error is in the log file $HOME/log/error.log.
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [ERROR] Настройка /etc/hosts на сервере $pg2 не выполнена
+Подробное описание ошибки находится в лог файле $HOME/log/error.log
+"
+fi
+}
+
+function logshieldok5 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] Dedicated IP for virtual IP address no busy
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] Выделенный IP под виртуальный IP-Адрес свободен
+"
+fi
+}
+
+function logshielder5 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [ERROR] Dedicated IP for virtual IP address is already in use
+A detailed description of the error is in the log file $HOME/log/error.log.
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [ERROR] Выделенный IP под виртуальный IP-Адрес уже используется
+Подробное описание ошибки находится в лог файле $HOME/log/error.log
+"
+fi
+}
+
+function logshieldok6 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] PostgreSQL ${n} has not yet been installed on the server ${pg1}
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] PostgreSQL ${n} еще не инсталирован на сервере ${pg1}
+"
+fi
+}
+
+function logshielder6 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [ERROR] PostgreSQL ${n} is already installed on the server ${pg1}
+A detailed description of the error is in the log file $HOME/log/error.log.
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [ERROR] PostgreSQL ${n} уже инсталирован на сервере ${pg1}
+Подробное описание ошибки находится в лог файле $HOME/log/error.log
+"
+fi
+}
+
+function logshieldok7 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] PostgreSQL ${n} has not yet been installed on the server ${pg2}
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [INFO] PostgreSQL ${n} еще не инсталирован на сервере ${pg2}
+"
+fi
+}
+
+function logshielder7 {
+if [ $langlocale -eq 0 ]
+        then
+                echo "
+`date '+%d.%m.%y_%H:%M'` [ERROR] PostgreSQL ${n} is already installed on the server ${pg2}
+A detailed description of the error is in the log file $HOME/log/error.log.
+"
+        else
+                echo "
+`date '+%d.%m.%y_%H:%M'` [ERROR] PostgreSQL ${n} уже инсталирован на сервере ${pg2}
+Подробное описание ошибки находится в лог файле $HOME/log/error.log
+"
+fi
+}

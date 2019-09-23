@@ -1,0 +1,37 @@
+#!/bin/bash
+#############################################################################################
+copies=DayC #необходимое количество дней для хранения бекапа (количество доступных копий)
+backupDIR=/pgdata/backups  #путь размещения бекапов
+log_name=/var/log/pg_log/postgresql-`date +%Y-%m-%d`.log; #путь размещения логов postgres
+tom=/pgdata                                                                                     #корневой том где размещена БД
+sizedb() # Функция вычисления объема БД (в Мб) не требует изменения
+{
+du -smx /pgdata/data | awk '{printf $1}'
+}
+A=`df -m | grep "$tom$" | awk '{print $4}'`;
+#############################################################################################
+
+if mv $backupDIR/pgbackup* $backupDIR/archive/
+        then
+        echo "< `date '+%Y-%m-%d %H:%M:%S.%3N %Z'` >INFO:  moving backups to the archive was completed successfully" >> $log_name
+else
+        echo "< `date '+%Y-%m-%d %H:%M:%S.%3N %Z'` >WARN:  moving backups to the archive is not possible" >> $log_name
+fi
+if [ $A -gt $(sizedb) ]
+        then
+        echo "< `date '+%Y-%m-%d %H:%M:%S.%3N %Z'` >INFO:  the space on the device is sufficient to create a backup" >> $log_name
+                                if pg_basebackup -D $backupDIR/pgbackup_`date +%d-%m-%y_%H-%M` -X s
+                                        then
+                                        echo "< `date '+%Y-%m-%d %H:%M:%S.%3N %Z'` >INFO:  create backup was completed successfully" >> $log_name
+                                                if rm -rf `find $backupDIR/archive/pgbackup* -maxdepth 0 -mtime +$copies`
+                                                        then
+                                                        echo "< `date '+%Y-%m-%d %H:%M:%S.%3N %Z'` >INFO:  deleting old backups was completed successfully" >> $log_name
+                                                else
+                                                        echo "< `date '+%Y-%m-%d %H:%M:%S.%3N %Z'` >WARN:  delete old backups was completed failed" >> $log_name
+                                                fi
+                                else
+                                        echo "< `date '+%Y-%m-%d %H:%M:%S.%3N %Z'` >ERROR:  create backup failed" >> $log_name
+                                fi
+else
+        echo "< `date '+%Y-%m-%d %H:%M:%S.%3N %Z'` >ERROR:  no space left on device for creating backup" >> $log_name
+fi

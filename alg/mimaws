@@ -1,0 +1,21 @@
+function mimaws {
+b=`cat $HOME/dep/setp.cfg | grep -c min_wal_size`
+c=`cat $HOME/dep/setp.cfg | grep -c max_wal_size`
+if [ $b -eq 0 ]
+        then
+                echo "min_wal_size = '2GB'" >> $HOME/dep/setp.cfg
+                sed -i 's!minws.*!minws='2'!g' dep/arg.cfg
+        else
+                sed -i 's!.*min_wal_size.*!min_wal_size = '"'2GB'"'!g' dep/setp.cfg
+                sed -i 's!minws.*!minws='2'!g' dep/arg.cfg
+fi
+
+if [ $c -eq 0 ]
+        then
+                echo "max_wal_size = '4GB'" >> $HOME/dep/setp.cfg
+                sed -i 's!maxws.*!maxws='4'!g' dep/arg.cfg
+        else
+                sed -i 's!.*max_wal_size.*!max_wal_size = '"'4GB'"'!g' dep/setp.cfg
+                sed -i 's!maxws.*!maxws='4'!g' dep/arg.cfg
+fi
+}
