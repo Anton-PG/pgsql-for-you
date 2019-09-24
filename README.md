@@ -40,9 +40,9 @@ configuration implemented in pcs + Corosync + Pasemaker software.
 - Correction of errors in the documentation, translation, adding new documentation.
 - Сreate scripts for opening connection pools.
 - Writing a playbook for other cluster solutions.
+- Optimization of algorithms for calculating DBMS configurations
 
 # Contact for communication
-
 - MAIL:     postgresqlclsearch@gmail.com
 - Telegram: +7(901)187-51-47
 - Viber:    +7(901)187-51-47
