@@ -1,6 +1,6 @@
 # Pgsql-for-you
 The script is completely written in bash.
-This script is intended for programmers and system administrators to install and
+This script is intended for programmers, system administrators, students to install and
 configure the PostgreSQL DBMS. This will help standardize the installation in the
 enterprise. One and two node configurations are currently available. Master-slave
 configuration implemented in pcs + Corosync + Pasemaker software.
