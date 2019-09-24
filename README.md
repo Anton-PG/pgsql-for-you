@@ -49,3 +49,4 @@ configuration implemented in pcs + Corosync + Pasemaker software.
 - Facebook: https://www.facebook.com/profile.php?id=100041576261405 
 
 # A video with instructions for use will be recorded shortly
+# Not recommended to install on a server where third-party software is already running
