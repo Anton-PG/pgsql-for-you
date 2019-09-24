@@ -1,4 +1,8 @@
 # Pgsql-for-you
+
+Special thanks to one well-known company for the translation;)
+I hope their translator did not spoil my text much
+
 The script is completely written in bash.
 This script is intended for programmers and system administrators to install and
 configure the PostgreSQL DBMS. This will help standardize the installation in the
