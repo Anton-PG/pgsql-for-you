@@ -24,9 +24,9 @@
 ##################################################################
 #                                                                #
 #                                                                #
-# Authors:      Antoshin Anton (postgresclsearch@gmail.com)      #
+# Authors:      Anton (postgresclsearch@gmail.com)      #
 #                                                                #
-# Copyright:    2019 Antoshin Anton (postgresclsearch@gmail.com) #
+# Copyright:    2019  Anton (postgresclsearch@gmail.com) #
 #                                                                #
 # License:      GNU General Public License (GPL)                 #
 #                                                                #
