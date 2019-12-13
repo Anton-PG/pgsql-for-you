@@ -132,10 +132,12 @@ infsettuning
         case $menu in
 
                 1)
+		 . $HOME/dep/config.cfg
                 setp1
                 ;;
 
                 2)
+		 . $HOME/dep/config.cfg
                 setp2
                 ;;
                 3)
